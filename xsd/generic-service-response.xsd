@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema 
+	version="1.0" 
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://api.psquickit.com/common"
+	xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+	jaxb:version="2.0">
+	
+	<xs:complexType name="genericServiceResponse" id="genericServiceResponse">
+		<xs:sequence>
+			<xs:element name="status" type="xs:boolean" />
+			<xs:element name="operation" type="xs:string" />
+			<xs:element name="errorMessage" type="xs:string" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

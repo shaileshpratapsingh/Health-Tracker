@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema 
+	version="1.0" 
+	xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+	jaxb:version="1.0"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://api.psquickit.com/user"
+	xmlns:ns1="http://api.psquickit.com/common"
+	xmlns:tns="http://api.psquickit.com/doctorUser">
+	
+		<xs:import 
+	  	namespace="http://api.psquickit.com/common" 
+	  	schemaLocation="generic-service-response.xsd"/>
+	
+	<xs:element name="doctorUser">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="uid" type="xs:string"/>
+				<xs:element name="name" type="xs:string"/>
+				<xs:element name="gender" type="xs:string"/>
+				<xs:element name="age" type="xs:string"/>
+				<xs:element name="contactNo" type="xs:string"/>
+				<xs:element name="clinicAddress" type="xs:string"/>
+				<xs:element name="practiceArea" type="xs:string"/>
+				<xs:element name="inPersonConsultant" type="xs:string"/>
+				<xs:element name="eConsultant" type="xs:string"/>
+				<xs:element name="clinicContactNo" type="xs:string"/>
+				<xs:element name="userType" type="xs:string"/>
+				<xs:element name="profileImg" type="xs:string"/>
+				<xs:element name="degrees" type="xs:string" maxOccurs="unbounded" />
+				<xs:element name="mciReg" type="xs:string" maxOccurs="unbounded" />
+				<xs:element name="specialization" type="xs:string" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="doctorUserResponse">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="ns1:genericServiceResponse">
+					<xs:sequence>
+						<xs:element name="id" type="xs:string"/>	
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>		
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="doctorUserLoginRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="id" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="doctorUserLoginRresponse">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="ns1:genericServiceResponse">
+					<xs:sequence>
+						<xs:element name="uid" type="xs:string"/>
+						<xs:element name="name" type="xs:string"/>
+						<xs:element name="gender" type="xs:string"/>
+						<xs:element name="age" type="xs:string"/>
+						<xs:element name="contactNo" type="xs:string"/>
+						<xs:element name="clinicAddress" type="xs:string"/>
+						<xs:element name="practiceArea" type="xs:string"/>
+						<xs:element name="inPersonConsultant" type="xs:string"/>
+						<xs:element name="eConsultant" type="xs:string"/>
+						<xs:element name="clinicContactNo" type="xs:string"/>
+						<xs:element name="userType" type="xs:string"/>
+						<xs:element name="profileImg" type="xs:string"/>
+						<xs:element name="degrees" type="xs:string" maxOccurs="unbounded" />
+						<xs:element name="mciReg" type="xs:string" maxOccurs="unbounded" />
+						<xs:element name="specialization" type="xs:string" maxOccurs="unbounded" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="listAllDegreeRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="id" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+		<xs:element name="listAllDegreeResponse">
+			<xs:complexType>
+				<xs:complexContent>
+					<xs:extension base="ns1:genericServiceResponse">
+						<xs:sequence>
+							<xs:element name="id" type="xs:string"/>
+							<xs:element name="title" type="xs:string"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="listAllSpecializationRequest">
+		<xs:complexType>
+			
+				<xs:sequence>
+					<xs:element name="id" type="xs:string"/>
+				</xs:sequence>
+		
+		</xs:complexType>
+	</xs:element>
+		<xs:element name="listAllSpecializationResponse">
+			<xs:complexType>
+				<xs:complexContent>
+					<xs:extension base="ns1:genericServiceResponse">
+						<xs:sequence>
+							<xs:element name="id" type="xs:string"/>
+							<xs:element name="title" type="xs:string"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="listAllMciRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="id" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+		<xs:element name="listAllMciResponse">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="ns1:genericServiceResponse">
+					<xs:sequence>
+						<xs:element name="id" type="xs:string"/>
+						<xs:element name="title" type="xs:string"/>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	</xs:schema>
+	
+	

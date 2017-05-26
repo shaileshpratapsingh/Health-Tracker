@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="pojo.psquickit.com" default="generate-pojos">
+	<property environment="env" />
+	<target name="remove-generated-pojos" description="Remove the generated POJOs">
+		<delete dir="src/main/java/com/psquickit/pojo" />
+		<delete verbose="true">
+			<fileset dir="xsd" includes="*.episode" />
+		</delete>
+	</target>
+
+	<target name="generate-pojos" description="Re-generate the POJOs" depends="remove-generated-pojos">
+		<exec executable="${env.JAVA_HOME}/bin/xjc" failonerror="true">
+			<arg value="-no-header" />
+			<arg value="xsd/generic-service-response.xsd" />
+			<arg value="-d" />
+			<arg value="src/main/java" />
+			<arg value="-p" />
+			<arg value="com.psquickit.pojo" />
+			<arg value="-b" />
+			<arg value="xsd/global-binding.xml" />
+			<arg value="-episode" />
+			<arg value="xsd/common.episode" />
+		</exec>
+		
+		
+		
+		<exec executable="${env.JAVA_HOME}/bin/xjc" failonerror="true">
+			<arg value="-no-header" />
+			<arg value="xsd/doctorUser.xsd" />
+			<arg value="-d" />
+			<arg value="src/main/java" />
+			<arg value="-p" />
+			<arg value="com.psquickit.pojo" />
+			<arg value="-extension" />
+			<arg value="-b" />
+			<arg value="xsd/common.episode" />
+			<arg value="-b" />
+			<arg value="xsd/global-binding.xml" />
+		</exec>
+		
+
+		<exec executable="${env.JAVA_HOME}/bin/xjc" failonerror="true">
+			<arg value="-no-header" />
+			<arg value="xsd/individualUser.xsd" />
+			<arg value="-d" />
+			<arg value="src/main/java" />
+			<arg value="-p" />
+			<arg value="com.psquickit.pojo" />
+			<arg value="-extension" />
+			<arg value="-b" />
+			<arg value="xsd/common.episode" />
+			<arg value="-b" />
+			<arg value="xsd/global-binding.xml" />
+		</exec>
+	</target>
+	
+	
+</project>
