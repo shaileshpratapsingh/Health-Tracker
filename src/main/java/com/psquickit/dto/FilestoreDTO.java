@@ -23,10 +23,6 @@ public class FilestoreDTO implements Serializable {
 	
 	@Column(name = "DocumentType")
 	private String documentType;
-	
-	@ManyToOne
-	@JoinColumn(name = "UserId")
-	private UserDTO userDTO;
 
 	public Long getId() {
 		return id;
@@ -50,14 +46,6 @@ public class FilestoreDTO implements Serializable {
 
 	public void setDocumentType(String documentType) {
 		this.documentType = documentType;
-	}
-
-	public UserDTO getUserDTO() {
-		return userDTO;
-	}
-
-	public void setUserDTO(UserDTO userDTO) {
-		this.userDTO = userDTO;
 	}
 
 }
