@@ -18,8 +18,9 @@ public class DoctorMciDTO {
 	@Column(name = "ID", unique = true, nullable = false)
 	private Long id;
 	
-	@Column(name = "DoctorUserId")
-	private Long doctorUserId;
+	@ManyToOne
+	@JoinColumn(name = "DoctorUserId")
+	private DoctorUserDTO doctorUserDTO;
 	
 	@ManyToOne
 	@JoinColumn(name = "MciMasterId")
@@ -36,16 +37,6 @@ public class DoctorMciDTO {
 		this.id = id;
 	}
 
-	public Long getDoctorUserId() {
-		return doctorUserId;
-	}
-
-	public void setDoctorUserId(Long doctorUserId) {
-		this.doctorUserId = doctorUserId;
-	}
-
-	
-
 	public MCIMasterDTO getMciMasterId() {
 		return mciMasterId;
 	}
@@ -60,6 +51,14 @@ public class DoctorMciDTO {
 
 	public void setRegistrationNumber(Long registrationNumber) {
 		this.registrationNumber = registrationNumber;
+	}
+
+	public DoctorUserDTO getDoctorUserDTO() {
+		return doctorUserDTO;
+	}
+
+	public void setDoctorUserDTO(DoctorUserDTO doctorUserDTO) {
+		this.doctorUserDTO = doctorUserDTO;
 	}
 	
 	

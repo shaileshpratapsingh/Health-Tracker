@@ -2,58 +2,42 @@ package com.psquickit.common;
 
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 public enum UserType {
 	
-	IndividualUser(1),
+	IndividualUser("IndividualUser"),
+	DoctorUser("DoctorUser");
 	
-	DoctorUser(2);
-	
-	private final int id;
-
-	private UserType(int id) {
-		this.id = id;
+	private final String name;
+	private UserType(String name){
+		this.name=name;
 	}
-
+	 
 	static {
 		ensureUniqueIDs();
 	}
 
 	private static void ensureUniqueIDs() throws AssertionError {
-		Set<Integer> ids = new HashSet<>();
+		Set<String> names = new HashSet<>();
 		for (UserType t : values()) {
-			if (!ids.add(t.id)) {
-				throw new RuntimeException("Duplicate UserType ID: " + t.id);
+			if (!names.add(t.name)) {
+				throw new RuntimeException("Duplicate user type " + t.name);
 			}
 		}
 	}
-
-	/**
-	 * Returns the ID of UserType. This is the value that represents this ID in the
-	 * database.
-	 */
-	public int getId() {
-		return id;
+	
+	public String getName() {
+		return name;
 	}
-
-	public static UserType fromId(int id) {
+	
+	public static UserType fromName(String name) {
 		for (UserType s : values()) {
-			if (s.id == id) {
+			if (s.name.equalsIgnoreCase(name)) {
 				return s;
 			}
 		}
-		throw new IllegalArgumentException("Invalid UserType ID: " + id);
-	}
-
-	public static Optional<UserType> tryId(int id) {
-		for (UserType s : values()) {
-			if (s.id == id) {
-				return Optional.of(s);
-			}
-		}
-		return Optional.empty();
+		throw new IllegalArgumentException("Invalid user type: " + name);
 	}
 	
 }

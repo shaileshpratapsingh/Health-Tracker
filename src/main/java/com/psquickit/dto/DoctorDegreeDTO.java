@@ -24,8 +24,32 @@ public class DoctorDegreeDTO implements Serializable {
 	@JoinColumn(name="DoctorUserId")
 	private DoctorUserDTO doctorUserDTO;
 	
-	
-	@Column(name = "DegreeMasterId")
-	private String abc;
+	@ManyToOne
+	@JoinColumn(name = "DegreeMasterId")
+	private DegreeMasterDTO degreeMasterDTO;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public DoctorUserDTO getDoctorUserDTO() {
+		return doctorUserDTO;
+	}
+
+	public void setDoctorUserDTO(DoctorUserDTO doctorUserDTO) {
+		this.doctorUserDTO = doctorUserDTO;
+	}
+
+	public DegreeMasterDTO getDegreeMasterDTO() {
+		return degreeMasterDTO;
+	}
+
+	public void setDegreeMasterDTO(DegreeMasterDTO degreeMasterDTO) {
+		this.degreeMasterDTO = degreeMasterDTO;
+	}
 
 }

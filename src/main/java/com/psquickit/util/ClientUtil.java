@@ -1,5 +1,6 @@
 package com.psquickit.util;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,7 +16,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class ClientUtil {
 	private static Properties configProp = null;
 	static{
-		configProp = ClientUtil.loadConfigPropertyFile("config.properties");
+		configProp = ClientUtil.loadSrcPropertyFile("config.properties");
 	}
 	
 	private static final String REST_API_HOST_ON = configProp.getProperty("rest.services.hosted.on");
@@ -25,6 +26,8 @@ public class ClientUtil {
 			(((REST_API_HOST_ON!=null) && !REST_API_HOST_ON.equalsIgnoreCase(""))?REST_API_HOST_ON:DEFAULT_REST_API_HOST_ON) +
 			REST_API_HOST_ON_CONTEXT_PATH;
 	
+	public static final String REST_IMAGE_PATH = configProp.getProperty("rest.image.path");
+	
 	public static Properties loadConfigPropertyFile(String filename) {	
 		Path configFile = Paths.get(System.getProperty("config.dir"), filename);
 		Properties properties = new Properties();
@@ -32,6 +35,21 @@ public class ClientUtil {
 			properties.load(in);
 		}catch (Exception e) {
 			System.out.println("Exception while loading properties file :"+e);
+		}
+		return trimPropertiesValue(properties);
+	}
+	
+	/**
+	 * Function to load a property file
+	 * @param filename
+	 * @return properties
+	 */
+	public static Properties loadSrcPropertyFile(String filename) {
+		Properties properties = new Properties();
+		try (InputStream inputStream = ClientUtil.class.getClassLoader().getResourceAsStream(filename)) {
+			properties.load(inputStream);
+		} catch (IOException ex) {
+			System.out.println(ex);
 		}
 		return trimPropertiesValue(properties);
 	}

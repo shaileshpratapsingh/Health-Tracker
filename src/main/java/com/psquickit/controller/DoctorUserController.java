@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.psquickit.manager.DoctorUserManager;
-import com.psquickit.pojo.Degree;
 import com.psquickit.pojo.DoctorUserRegisterRequest;
 import com.psquickit.pojo.DoctorUserResponse;
 import com.psquickit.pojo.ListAllDegreeResponse;

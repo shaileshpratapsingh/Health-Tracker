@@ -1,10 +1,13 @@
 package com.psquickit.dto;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -17,7 +20,7 @@ public class UserDTO {
 	private Long id;
 	
 	
-	@Column(name = "AdharNumber", length = 50)
+	@Column(name = "AdhaarNumber", length = 50)
 	private String uid;
 	
 	@Column(name = "FirstName", length = 50)
@@ -47,8 +50,9 @@ public class UserDTO {
 	@Column(name = "AlternateAddress", length = 500)
 	private String alternateAddress;
 	
-	@Column(name = "ProfileImageFileStoreId", length = 50)
-	private Long profileImageFileStoreId;
+	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "ProfileImageFileStoreId" )
+	private FileStoreDTO profileImageFileStoreId;
 	
 	@Column(name = "UserType", length = 500)
 	private String userType;
@@ -125,11 +129,11 @@ public class UserDTO {
 		this.alternateAddress = alternateAddress;
 	}
 
-	public Long getProfileImageFileStoreId() {
+	public FileStoreDTO getProfileImageFileStoreId() {
 		return profileImageFileStoreId;
 	}
 
-	public void setProfileImageFileStoreId(Long profileImageFileStoreId) {
+	public void setProfileImageFileStoreId(FileStoreDTO profileImageFileStoreId) {
 		this.profileImageFileStoreId = profileImageFileStoreId;
 	}
 

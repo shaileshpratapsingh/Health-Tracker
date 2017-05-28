@@ -18,7 +18,7 @@ public class SpecializationMasterDTO implements Serializable {
 	@Column(name = "ID", unique = true, nullable = false)
 	private Long id;
 	
-	@Column(name = "SpecializationName", length = 500)
+	@Column(name = "SpecializationName")
 	private String specializationName;
 
 	public Long getId() {

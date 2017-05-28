@@ -9,16 +9,18 @@
 
 	<xs:complexType name="user">
 		<xs:sequence>
-			<xs:element name="uid" type="xs:string" minOccurs="0"/>
-			<xs:element name="name" type="xs:string"  minOccurs="0"/>
-			<xs:element name="gender" type="xs:string"  minOccurs="0" />
-			<xs:element name="age" type="xs:string"   minOccurs="0"/>
-			<xs:element name="contactNo" type="xs:string"  minOccurs="0" />
-			<xs:element name="alternateContactNo" type="xs:string"  minOccurs="0"/>
-			<xs:element name="alternateAddress" type="xs:string"  minOccurs="0"/>
-			<xs:element name="permanentAddress" type="xs:string"  minOccurs="0" />
-			<xs:element name="userType" type="xs:string"  minOccurs="0"/>
-			<xs:element name="profileImg" type="xs:string"  minOccurs="0" />
+			<xs:element name="uid" type="xs:string" />
+			<xs:element name="firstName" type="xs:string"/>
+			<xs:element name="lastName" type="xs:string"/>
+			<xs:element name="gender" type="xs:string"/>
+			<xs:element name="age" type="xs:string"/>
+			<xs:element name="contactNo" type="xs:string"/>
+			<xs:element name="alternateContactNo" type="xs:string"/>
+			<xs:element name="alternateAddress" type="xs:string"/>
+			<xs:element name="permanentAddress" type="xs:string" />
+			<xs:element name="userType" type="xs:string"/>
+			<xs:element name="profileImg" type="xs:string" />
+			<xs:element name="email" type="xs:string" />
 		</xs:sequence>
 	</xs:complexType>
 	<xs:element name="individualUserRegisterRequest">

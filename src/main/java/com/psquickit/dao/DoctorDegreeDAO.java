@@ -7,12 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.psquickit.dto.DoctorUserDTO;
-import com.psquickit.dto.UserDTO;
+import com.psquickit.dto.DoctorDegreeDTO;
 
 @Repository
-public interface UserDAO extends JpaRepository<UserDTO, Long> {
+public interface DoctorDegreeDAO  extends JpaRepository<DoctorDegreeDTO, Long>{
 	
-	@Query("Select u from UserDTO u where u.uid = :uid")
-	public UserDTO checkUIDExist(@Param("uid") String uid);
+	@Query("Select d from DoctorDegreeDTO d where d.doctorUserDTO.id = :id")
+	public List<DoctorDegreeDTO> getDoctorDegrees(@Param("id") Long uid);
 }

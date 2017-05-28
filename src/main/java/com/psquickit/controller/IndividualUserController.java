@@ -30,4 +30,16 @@ public class IndividualUserController {
 		}
 		return response;
 	}
+	
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	public @ResponseBody IndividualUserRegisterResponse updateUser(
+			@RequestBody IndividualUserRegisterRequest request) {
+		IndividualUserRegisterResponse response = new IndividualUserRegisterResponse();
+		try {
+			response = manager.registerUser(request);
+		} catch (Exception e) {
+			return ServiceUtils.setResponse(response, false, "User Registration", e);
+		}
+		return response;
+	}
 }

@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.psquickit.common.CommonUtil;
-import com.psquickit.dao.FileStoreDAO;
 import com.psquickit.dao.UserDAO;
 import com.psquickit.dto.UserDTO;
 import com.psquickit.manager.IndividualUserManager;
@@ -21,14 +20,11 @@ public class IndividualUserManagerImpl implements IndividualUserManager {
 	@Autowired
 	UserDAO userDAO;
 	
-	@Autowired
-	FileStoreDAO  fileStoreDAO;
-	
 	@Override
 	public IndividualUserRegisterResponse registerUser(IndividualUserRegisterRequest request) throws Exception {
 		logger.info("Reaching in manager");
 		UserDTO dto = CommonUtil.mapRequestToDTO(request.getIndividualUser());
-		 userDAO.saveAndFlush(dto);
+		userDAO.save(dto);
 		return ServiceUtils.setResponse(new IndividualUserRegisterResponse(), 
 				true, "Register User");
 	}

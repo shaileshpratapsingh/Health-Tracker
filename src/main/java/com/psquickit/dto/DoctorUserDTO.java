@@ -19,7 +19,7 @@ public class DoctorUserDTO implements Serializable {
 	@Column(name = "ID", unique = true, nullable = false)
 	private Long id;
 	
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "UserId")
 	private UserDTO userDTO;
 	

@@ -18,9 +18,9 @@
 					<xs:element name="inPersonConsultant" type="xs:string" />
 					<xs:element name="eConsultant" type="xs:string" />
 					<xs:element name="clinicContactNo" type="xs:string" />
-					<xs:element name="degrees" type="xs:string" maxOccurs="unbounded" />
-					<xs:element name="mciReg" type="xs:string" maxOccurs="unbounded" />
-					<xs:element name="specialization" type="xs:string"
+					<xs:element name="degrees" type="tns:degree" maxOccurs="unbounded" />
+					<xs:element name="mciReg" type="tns:mci" maxOccurs="unbounded" />
+					<xs:element name="specialization" type="tns:specialization"
 						maxOccurs="unbounded" />
 				</xs:sequence>
 			</xs:extension>
@@ -86,7 +86,7 @@
 		</xs:complexType>
 	</xs:element>
 	
-	<xs:complexType name="speciliazation">
+	<xs:complexType name="specialization">
 		<xs:sequence>
 			<xs:element name="id" type="xs:string" />
 			<xs:element name="title" type="xs:string" />
@@ -98,7 +98,7 @@
 			<xs:complexContent>
 				<xs:extension base="ns1:genericServiceResponse">
 					<xs:sequence>
-						<xs:element name="speciliazations" type="tns:speciliazation" maxOccurs="unbounded" />
+						<xs:element name="speciliazations" type="tns:specialization" maxOccurs="unbounded" />
 					</xs:sequence>
 				</xs:extension>
 			</xs:complexContent>
@@ -109,6 +109,7 @@
 		<xs:sequence>
 			<xs:element name="id" type="xs:string" />
 			<xs:element name="title" type="xs:string" />
+			<xs:element name="registrationNumber" type="xs:string" />
 		</xs:sequence>
 	</xs:complexType>
 

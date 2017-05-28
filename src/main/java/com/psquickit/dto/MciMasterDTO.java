@@ -16,7 +16,7 @@ public class MCIMasterDTO {
 	@Column(name = "ID", unique = true, nullable = false)
 	private Long id;
 	
-	@Column(name = "MciName", length = 500)
+	@Column(name = "MciName")
 	private String mciName;
 
 	public Long getId() {
