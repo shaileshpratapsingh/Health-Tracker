@@ -1,143 +1,148 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<xs:schema 
-	version="1.0" 
-	xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
-	jaxb:version="1.0"
-	xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	targetNamespace="http://api.psquickit.com/user"
-	xmlns:ns1="http://api.psquickit.com/common"
-	xmlns:tns="http://api.psquickit.com/doctorUser">
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://api.psquickit.com/doctorUser" xmlns:tns="http://api.psquickit.com/doctorUser"
+	xmlns:ns1="http://api.psquickit.com/common" xmlns:ns2="http://api.psquickit.com/individualUser">
+
+	<xs:import namespace="http://api.psquickit.com/common"
+		schemaLocation="generic-service-response.xsd" />
+	<xs:import namespace="http://api.psquickit.com/individualUser"
+		schemaLocation="individualUser.xsd" />
+
+
+	<xs:complexType name="doctorUser">
+		<xs:complexContent>
+			<xs:extension base="ns2:user">
+				<xs:sequence>
+					<xs:element name="clinicAddress" type="xs:string" />
+					<xs:element name="practiceArea" type="xs:string" />
+					<xs:element name="inPersonConsultant" type="xs:string" />
+					<xs:element name="eConsultant" type="xs:string" />
+					<xs:element name="clinicContactNo" type="xs:string" />
+					<xs:element name="degrees" type="xs:string" maxOccurs="unbounded" />
+					<xs:element name="mciReg" type="xs:string" maxOccurs="unbounded" />
+					<xs:element name="specialization" type="xs:string"
+						maxOccurs="unbounded" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 	
-		<xs:import 
-	  	namespace="http://api.psquickit.com/common" 
-	  	schemaLocation="generic-service-response.xsd"/>
-	
-	<xs:element name="doctorUser">
+	<xs:element name="doctorUserRegisterRequest">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element name="uid" type="xs:string"/>
-				<xs:element name="name" type="xs:string"/>
-				<xs:element name="gender" type="xs:string"/>
-				<xs:element name="age" type="xs:string"/>
-				<xs:element name="contactNo" type="xs:string"/>
-				<xs:element name="clinicAddress" type="xs:string"/>
-				<xs:element name="practiceArea" type="xs:string"/>
-				<xs:element name="inPersonConsultant" type="xs:string"/>
-				<xs:element name="eConsultant" type="xs:string"/>
-				<xs:element name="clinicContactNo" type="xs:string"/>
-				<xs:element name="userType" type="xs:string"/>
-				<xs:element name="profileImg" type="xs:string"/>
-				<xs:element name="degrees" type="xs:string" maxOccurs="unbounded" />
-				<xs:element name="mciReg" type="xs:string" maxOccurs="unbounded" />
-				<xs:element name="specialization" type="xs:string" maxOccurs="unbounded" />
+				<xs:element name="doctorUser" type="tns:doctorUser" />
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
+	
+
 	<xs:element name="doctorUserResponse">
 		<xs:complexType>
 			<xs:complexContent>
 				<xs:extension base="ns1:genericServiceResponse">
 					<xs:sequence>
-						<xs:element name="id" type="xs:string"/>	
+						<xs:element name="id" type="xs:string" />
 					</xs:sequence>
 				</xs:extension>
-			</xs:complexContent>		
+			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
-	
+
 	<xs:element name="doctorUserLoginRequest">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element name="id" type="xs:string"/>
+				<xs:element name="id" type="xs:string" />
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="doctorUserLoginRresponse">
+	<xs:element name="doctorUserLoginResponse">
 		<xs:complexType>
 			<xs:complexContent>
 				<xs:extension base="ns1:genericServiceResponse">
 					<xs:sequence>
-						<xs:element name="uid" type="xs:string"/>
-						<xs:element name="name" type="xs:string"/>
-						<xs:element name="gender" type="xs:string"/>
-						<xs:element name="age" type="xs:string"/>
-						<xs:element name="contactNo" type="xs:string"/>
-						<xs:element name="clinicAddress" type="xs:string"/>
-						<xs:element name="practiceArea" type="xs:string"/>
-						<xs:element name="inPersonConsultant" type="xs:string"/>
-						<xs:element name="eConsultant" type="xs:string"/>
-						<xs:element name="clinicContactNo" type="xs:string"/>
-						<xs:element name="userType" type="xs:string"/>
-						<xs:element name="profileImg" type="xs:string"/>
-						<xs:element name="degrees" type="xs:string" maxOccurs="unbounded" />
-						<xs:element name="mciReg" type="xs:string" maxOccurs="unbounded" />
-						<xs:element name="specialization" type="xs:string" maxOccurs="unbounded" />
+						<xs:element name="doctorUser" type="tns:doctorUser" />
 					</xs:sequence>
 				</xs:extension>
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="listAllDegreeRequest">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="id" type="xs:string"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-		<xs:element name="listAllDegreeResponse">
-			<xs:complexType>
-				<xs:complexContent>
-					<xs:extension base="ns1:genericServiceResponse">
-						<xs:sequence>
-							<xs:element name="id" type="xs:string"/>
-							<xs:element name="title" type="xs:string"/>
-						</xs:sequence>
-					</xs:extension>
-				</xs:complexContent>
-			</xs:complexType>
-	</xs:element>
 	
-	<xs:element name="listAllSpecializationRequest">
-		<xs:complexType>
-			
-				<xs:sequence>
-					<xs:element name="id" type="xs:string"/>
-				</xs:sequence>
-		
-		</xs:complexType>
-	</xs:element>
-		<xs:element name="listAllSpecializationResponse">
-			<xs:complexType>
-				<xs:complexContent>
-					<xs:extension base="ns1:genericServiceResponse">
-						<xs:sequence>
-							<xs:element name="id" type="xs:string"/>
-							<xs:element name="title" type="xs:string"/>
-						</xs:sequence>
-					</xs:extension>
-				</xs:complexContent>
-			</xs:complexType>
-	</xs:element>
+	<xs:complexType name="degree">
+		<xs:sequence>
+			<xs:element name="id" type="xs:string" />
+			<xs:element name="title" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
 	
-	<xs:element name="listAllMciRequest">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="id" type="xs:string"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-		<xs:element name="listAllMciResponse">
+	<xs:element name="listAllDegreeResponse">
 		<xs:complexType>
 			<xs:complexContent>
 				<xs:extension base="ns1:genericServiceResponse">
 					<xs:sequence>
-						<xs:element name="id" type="xs:string"/>
-						<xs:element name="title" type="xs:string"/>
+						<xs:element name="degrees" type="tns:degree" maxOccurs="unbounded"/>
 					</xs:sequence>
 				</xs:extension>
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
-	</xs:schema>
+	
+	<xs:complexType name="speciliazation">
+		<xs:sequence>
+			<xs:element name="id" type="xs:string" />
+			<xs:element name="title" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:element name="listAllSpecializationResponse">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="ns1:genericServiceResponse">
+					<xs:sequence>
+						<xs:element name="speciliazations" type="tns:speciliazation" maxOccurs="unbounded" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:complexType name="mci">
+		<xs:sequence>
+			<xs:element name="id" type="xs:string" />
+			<xs:element name="title" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:element name="listAllMciResponse">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="ns1:genericServiceResponse">
+					<xs:sequence>
+						<xs:element name="mcis" type="tns:mci" maxOccurs="unbounded" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="userLoginRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="uid" type="xs:string" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="userLoginResponse">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="ns1:genericServiceResponse">
+					<xs:sequence>
+						<xs:element name="userDetails" type="tns:doctorUser" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
 	
 	

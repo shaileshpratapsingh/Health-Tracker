@@ -10,7 +10,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "filestore")
-public class FilestoreDTO implements Serializable {
+public class FileStoreDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id

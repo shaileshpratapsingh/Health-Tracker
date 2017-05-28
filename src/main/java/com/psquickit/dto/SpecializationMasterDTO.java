@@ -18,7 +18,7 @@ public class SpecializationMasterDTO implements Serializable {
 	@Column(name = "ID", unique = true, nullable = false)
 	private Long id;
 	
-	@Column(name = "SpecializationName")
+	@Column(name = "SpecializationName", length = 500)
 	private String specializationName;
 
 	public Long getId() {
@@ -36,5 +36,11 @@ public class SpecializationMasterDTO implements Serializable {
 	public void setSpecializationName(String specializationName) {
 		this.specializationName = specializationName;
 	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	
+	
 
 }

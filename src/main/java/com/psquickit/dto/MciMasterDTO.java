@@ -1,24 +1,22 @@
 package com.psquickit.dto;
 
-import java.io.Serializable;
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-
-/**
- * The persistent class for the mcimaster database table.
- * 
- */
 @Entity
-@Table(name = "MciMaster")
-public class MciMasterDTO implements Serializable {
-	private static final long serialVersionUID = 1L;
-
+@Table(name = "mcimaster")
+public class MCIMasterDTO {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID", unique = true, nullable = false)
 	private Long id;
 	
-	@Column(name = "MciName")
+	@Column(name = "MciName", length = 500)
 	private String mciName;
 
 	public Long getId() {
@@ -36,4 +34,7 @@ public class MciMasterDTO implements Serializable {
 	public void setMciName(String mciName) {
 		this.mciName = mciName;
 	}
+	
+	
+	
 }

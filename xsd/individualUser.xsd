@@ -1,74 +1,49 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<xs:schema 
-	version="1.0" 
-	xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
-	jaxb:version="1.0"
-	xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	targetNamespace="http://api.psquickit.com/user"
-	xmlns:ns1="http://api.psquickit.com/common"
-	xmlns:tns="http://api.psquickit.com/individualUser">
-	
-		<xs:import 
-	  	namespace="http://api.psquickit.com/common" 
-	  	schemaLocation="generic-service-response.xsd"/>
-	
-	<xs:element name="individualUser">
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://api.psquickit.com/individualUser" xmlns:tns="http://api.psquickit.com/individualUser"
+	xmlns:ns1="http://api.psquickit.com/common">
+
+	<xs:import namespace="http://api.psquickit.com/common"
+		schemaLocation="generic-service-response.xsd" />
+
+
+	<xs:complexType name="user">
+		<xs:sequence>
+			<xs:element name="uid" type="xs:string" minOccurs="0"/>
+			<xs:element name="name" type="xs:string"  minOccurs="0"/>
+			<xs:element name="gender" type="xs:string"  minOccurs="0" />
+			<xs:element name="age" type="xs:string"   minOccurs="0"/>
+			<xs:element name="contactNo" type="xs:string"  minOccurs="0" />
+			<xs:element name="alternateContactNo" type="xs:string"  minOccurs="0"/>
+			<xs:element name="alternateAddress" type="xs:string"  minOccurs="0"/>
+			<xs:element name="permanentAddress" type="xs:string"  minOccurs="0" />
+			<xs:element name="userType" type="xs:string"  minOccurs="0"/>
+			<xs:element name="profileImg" type="xs:string"  minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="individualUserRegisterRequest">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element name="uid" type="xs:string"/>
-				<xs:element name="name" type="xs:string"/>
-				<xs:element name="gender" type="xs:string"/>
-				<xs:element name="age" type="xs:string"/>
-				<xs:element name="contactNo" type="xs:string"/>
-				<xs:element name="alternetContactNo" type="xs:string"/>
-				<xs:element name="alternetAddress" type="xs:string"/>
-				<xs:element name="permanentAddress" type="xs:string"/>
-				<xs:element name="userType" type="xs:string"/>
-				<xs:element name="profileImg" type="xs:string"/>
+				<xs:element name="individualUser" type="tns:user" />
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="individualUserResponse">
+
+
+	<xs:element name="individualUserRegisterResponse">
 		<xs:complexType>
 			<xs:complexContent>
 				<xs:extension base="ns1:genericServiceResponse">
 					<xs:sequence>
-						<xs:element name="id" type="xs:string"/>	
+						<xs:element name="id" type="xs:string" />
 					</xs:sequence>
 				</xs:extension>
-			</xs:complexContent>		
+			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
+
 	
-	<xs:element name="individualUserLoginRequest">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="uid" type="xs:string"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	
-	<xs:element name="individualUserLoginResponse">
-		<xs:complexType>
-			<xs:complexContent>
-				<xs:extension base="ns1:genericServiceResponse">
-					<xs:sequence>
-						<xs:element name="uid" type="xs:string"/>
-						<xs:element name="name" type="xs:string"/>
-						<xs:element name="gender" type="xs:string"/>
-						<xs:element name="age" type="xs:string"/>
-						<xs:element name="contactNo" type="xs:string"/>
-						<xs:element name="alternetContactNo" type="xs:string"/>
-						<xs:element name="alternetAddress" type="xs:string"/>
-						<xs:element name="permanentAddress" type="xs:string"/>
-						<xs:element name="userType" type="xs:string"/>
-						<xs:element name="profileImg" type="xs:string"/>
-					</xs:sequence>
-				</xs:extension>
-			</xs:complexContent>	
-		</xs:complexType>
-	</xs:element>
-	
+
 </xs:schema>
 	
 	

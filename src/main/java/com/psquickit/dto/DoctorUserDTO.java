@@ -10,6 +10,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "doctoruser")
+@NamedQuery(name="DoctorUser.findAll", query="SELECT d FROM DoctorUserDTO d")
 public class DoctorUserDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 

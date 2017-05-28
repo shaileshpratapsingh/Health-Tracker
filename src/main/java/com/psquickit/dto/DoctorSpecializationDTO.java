@@ -13,9 +13,8 @@ import javax.persistence.Table;
 
 
 @Entity
-@Table(name = "doctorSpecialization")
+@Table(name = "doctorspecialization")
 public class DoctorSpecializationDTO implements Serializable{
-	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,25 +1,33 @@
 package com.psquickit.dto;
 
-import java.io.Serializable;
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-
-/**
- * The persistent class for the users database table.
- * 
- */
 @Entity
-@Table(name="users")
-public class UserDTO implements Serializable {
-	private static final long serialVersionUID = 1L;
-	
+@Table(name = "users")
+public class UserDTO {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID", unique = true, nullable = false)
 	private Long id;
 	
+	
+	@Column(name = "AdharNumber", length = 50)
+	private String uid;
+	
 	@Column(name = "FirstName", length = 50)
 	private String firstName;
+	
+	@Column(name = "age", length = 50)
+	private String age;
+	
+	@Column(name = "gender", length = 50)
+	private String gender;
 	
 	@Column(name = "LastName", length = 50)
 	private String lastName;
@@ -52,7 +60,15 @@ public class UserDTO implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
+	
+	public String getUid() {
+		return uid;
+	}
 
+	public void setUid(String uid) {
+		this.uid = uid;
+	}
+	
 	public String getFirstName() {
 		return firstName;
 	}
@@ -125,4 +141,22 @@ public class UserDTO implements Serializable {
 		this.userType = userType;
 	}
 
+	public String getAge() {
+		return age;
+	}
+
+	public void setAge(String age) {
+		this.age = age;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	
+	
+	
 }
