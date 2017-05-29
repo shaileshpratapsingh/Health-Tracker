@@ -43,6 +43,27 @@
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
+	
+	<xs:element name="individualUserUpdateRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="individualUser" type="tns:user" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+
+	<xs:element name="individualUserUpdateResponse">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="ns1:genericServiceResponse">
+					<xs:sequence>
+						<xs:element name="id" type="xs:string" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
 
 	
 

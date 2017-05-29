@@ -36,7 +36,28 @@
 	</xs:element>
 	
 
-	<xs:element name="doctorUserResponse">
+	<xs:element name="doctorUserRegisterResponse">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="ns1:genericServiceResponse">
+					<xs:sequence>
+						<xs:element name="id" type="xs:string" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="doctorUserUpdateRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="doctorUser" type="tns:doctorUser" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+
+	<xs:element name="doctorUserUpdateResponse">
 		<xs:complexType>
 			<xs:complexContent>
 				<xs:extension base="ns1:genericServiceResponse">

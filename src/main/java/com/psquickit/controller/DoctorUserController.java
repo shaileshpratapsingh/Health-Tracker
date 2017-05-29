@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.psquickit.manager.DoctorUserManager;
 import com.psquickit.pojo.DoctorUserRegisterRequest;
-import com.psquickit.pojo.DoctorUserResponse;
+import com.psquickit.pojo.DoctorUserRegisterResponse;
+import com.psquickit.pojo.DoctorUserUpdateRequest;
+import com.psquickit.pojo.DoctorUserUpdateResponse;
 import com.psquickit.pojo.ListAllDegreeResponse;
 import com.psquickit.pojo.ListAllMciResponse;
 import com.psquickit.pojo.ListAllSpecializationResponse;
@@ -22,10 +24,21 @@ public class DoctorUserController {
 	DoctorUserManager doctorUserManger;
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public @ResponseBody DoctorUserResponse registerUser(@RequestBody DoctorUserRegisterRequest request) {
-		DoctorUserResponse response = new DoctorUserResponse();
+	public @ResponseBody DoctorUserRegisterResponse registerUser(@RequestBody DoctorUserRegisterRequest request) {
+		DoctorUserRegisterResponse response = new DoctorUserRegisterResponse();
 		try {
 			response = doctorUserManger.registerUser(request);
+		} catch (Exception e) {
+			return ServiceUtils.setResponse(response, false, "Doctor User Registration", e);
+		}
+		return response;
+	}
+	
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	public @ResponseBody DoctorUserUpdateResponse updateUser(@RequestBody DoctorUserUpdateRequest request) {
+		DoctorUserUpdateResponse response = new DoctorUserUpdateResponse();
+		try {
+			response = doctorUserManger.updateUser(request);
 		} catch (Exception e) {
 			return ServiceUtils.setResponse(response, false, "Doctor User Registration", e);
 		}
