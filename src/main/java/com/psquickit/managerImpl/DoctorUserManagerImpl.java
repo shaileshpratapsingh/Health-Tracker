@@ -147,6 +147,11 @@ public class DoctorUserManagerImpl extends CommonManager implements DoctorUserMa
 		specializationResponse.getSpeciliazations().addAll(listSpecialization);
 		return ServiceUtils.setResponse(specializationResponse, true, "List all specialization");
 	}
+	@Override
+	public DoctorUserRegisterResponse updateUser(DoctorUserUpdateRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	@Override
 	public DoctorUserUpdateResponse updateUser(DoctorUserUpdateRequest request) throws Exception {

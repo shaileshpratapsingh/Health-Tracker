@@ -66,6 +66,28 @@ public abstract class CommonManager {
 		}
 		return userDTO;
 	}
+
+	public UserDTO mapUserRequestToDTO (User user){
+		UserDTO userDTO = new UserDTO();
+		userDTO.setUid(user.getUid());
+		userDTO.setFirstName(user.getFirstName());
+		userDTO.setLastName(user.getLastName());
+		userDTO.setContactNumber(user.getContactNo());
+		userDTO.setAlternateContactNumber(user.getAlternateContactNo());
+		userDTO.setAlternateAddress(user.getAlternateAddress());
+		userDTO.setPermanentAddress(user.getPermanentAddress());
+		userDTO.setAge(user.getAge());
+		userDTO.setGender(user.getGender());
+		userDTO.setEmail(user.getEmail());
+		userDTO.setUserType(UserType.fromName(user.getUserType()).getName());
+		
+		//TODO- change logic to save file on filestore
+		FileStoreDTO fileStoreDTO = new FileStoreDTO();
+		fileStoreDTO.setDocumentType("ProfilePicture");
+		fileStoreDTO.setLocation("c/image/image.jpg");
+		userDTO.setProfileImageFileStoreId(fileStoreDTO);
+		return userDTO;
+	}
 	
 	
 	public UserLoginResponse mapUserDTOToResponse (UserDTO userDTO){
