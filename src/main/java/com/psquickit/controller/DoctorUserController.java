@@ -17,7 +17,7 @@ import com.psquickit.pojo.ListAllSpecializationResponse;
 import com.psquickit.util.ServiceUtils;
 
 @RestController
-@RequestMapping("/doctorUser")
+@RequestMapping("/user/doctor")
 public class DoctorUserController {
 
 	@Autowired
@@ -45,7 +45,7 @@ public class DoctorUserController {
 		return response;
 	}
 	
-	@RequestMapping(value = "/degreeList", method = RequestMethod.GET)
+	@RequestMapping(value = "/list/degree", method = RequestMethod.GET)
 	@ResponseBody public ListAllDegreeResponse listAllDegrees(){
 		ListAllDegreeResponse response = new ListAllDegreeResponse();
 		try {
@@ -56,7 +56,7 @@ public class DoctorUserController {
 		return response;
 	}
 	
-	@RequestMapping(value = "/mciList", method = RequestMethod.GET)
+	@RequestMapping(value = "/list/mci", method = RequestMethod.GET)
 	@ResponseBody public ListAllMciResponse listAllMci(){
 		ListAllMciResponse response = new ListAllMciResponse();
 		try {
@@ -66,7 +66,8 @@ public class DoctorUserController {
 		}
 		return response;
 	}
-	@RequestMapping(value = "/specializationList", method = RequestMethod.GET)
+	
+	@RequestMapping(value = "/list/specialization", method = RequestMethod.GET)
 	@ResponseBody public ListAllSpecializationResponse listAllSpecialization(){
 		ListAllSpecializationResponse response = new ListAllSpecializationResponse();
 		try {

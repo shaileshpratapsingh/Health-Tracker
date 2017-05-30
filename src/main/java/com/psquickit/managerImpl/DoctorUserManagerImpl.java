@@ -11,7 +11,7 @@ import com.psquickit.dto.DoctorDegreeDTO;
 import com.psquickit.dto.DoctorMciDTO;
 import com.psquickit.dto.DoctorSpecializationDTO;
 import com.psquickit.dto.DoctorUserDTO;
-import com.psquickit.dto.MCIMasterDTO;
+import com.psquickit.dto.MciMasterDTO;
 import com.psquickit.dto.SpecializationMasterDTO;
 import com.psquickit.dto.UserDTO;
 import com.psquickit.manager.CommonManager;
@@ -20,6 +20,7 @@ import com.psquickit.pojo.Degree;
 import com.psquickit.pojo.DoctorUserRegisterRequest;
 import com.psquickit.pojo.DoctorUserRegisterResponse;
 import com.psquickit.pojo.DoctorUserUpdateRequest;
+import com.psquickit.pojo.DoctorUserUpdateResponse;
 import com.psquickit.pojo.ListAllDegreeResponse;
 import com.psquickit.pojo.ListAllMciResponse;
 import com.psquickit.pojo.ListAllSpecializationResponse;
@@ -113,9 +114,9 @@ public class DoctorUserManagerImpl extends CommonManager implements DoctorUserMa
 	@Override
 	public ListAllMciResponse listAllMci() throws Exception {
 		ListAllMciResponse mciList = new ListAllMciResponse();
-		List<MCIMasterDTO> listMciMasterDTO =  mciMasterDAO.findAll();
+		List<MciMasterDTO> listMciMasterDTO =  mciMasterDAO.findAll();
 		List<Mci> listMci =  Lists.newArrayList();
-		for(MCIMasterDTO mciMatserDTO : listMciMasterDTO){
+		for(MciMasterDTO mciMatserDTO : listMciMasterDTO){
 			Mci mci = new Mci();
 			mci.setId(mciMatserDTO.getId().toString());
 			mci.setTitle(mciMatserDTO.getMciName());
@@ -140,7 +141,7 @@ public class DoctorUserManagerImpl extends CommonManager implements DoctorUserMa
 		return specializationList;
 	}
 	@Override
-	public DoctorUserRegisterResponse updateUser(DoctorUserUpdateRequest request) throws Exception {
+	public DoctorUserUpdateResponse updateUser(DoctorUserUpdateRequest request) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "mcimaster")
-public class MCIMasterDTO {
+public class MciMasterDTO {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
