@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import com.psquickit.dto.SpecializationMasterDTO;
 
-
 @Repository
 public interface SpecializationMasterDAO extends JpaRepository<SpecializationMasterDTO, Long> {
 

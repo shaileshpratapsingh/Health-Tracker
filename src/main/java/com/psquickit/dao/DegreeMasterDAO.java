@@ -8,5 +8,4 @@ import com.psquickit.dto.DegreeMasterDTO;
 @Repository
 public interface DegreeMasterDAO extends JpaRepository<DegreeMasterDTO, Long> {
 	
-	
 }
