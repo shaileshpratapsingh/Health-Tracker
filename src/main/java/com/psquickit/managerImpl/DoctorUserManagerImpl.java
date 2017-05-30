@@ -25,6 +25,7 @@ import com.psquickit.dto.SpecializationMasterDTO;
 import com.psquickit.dto.UserDTO;
 import com.psquickit.manager.DoctorUserManager;
 import com.psquickit.pojo.Degree;
+import com.psquickit.pojo.DoctorUser;
 import com.psquickit.pojo.DoctorUserRegisterRequest;
 import com.psquickit.pojo.DoctorUserRegisterResponse;
 import com.psquickit.pojo.DoctorUserUpdateRequest;
@@ -67,60 +68,72 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 	
 	@Override
 	public DoctorUserRegisterResponse registerUser(DoctorUserRegisterRequest request) throws Exception {
+		logger.info("Reaching in manager");
 		UserDTO userDTO = userDAO.checkUIDExist(request.getDoctorUser().getUid());
 		if(userDTO != null){
 			throw new HandledException("DUPLICATE_USER_REGISTRATION", 
 					"Duplicate User Registration");
 		}
-		DoctorUserDTO dto = mapDoctorRegisterRequest(request);
+		DoctorUserDTO doctorUserDTO = mapDoctorRegisterRequest(request.getDoctorUser(), null, null);
 		
-		dto = doctorUserDAO.save(dto);
+		doctorUserDTO = doctorUserDAO.save(doctorUserDTO);
 		
-		//Doctor specialization
-		List<DoctorSpecializationDTO> listDoctorSpecializationDTO = Lists.newArrayList();
-		for(Specialization s : request.getDoctorUser().getSpecialization()) {
-			DoctorSpecializationDTO doctorSpecializationDTO = new DoctorSpecializationDTO();
-			doctorSpecializationDTO.setDoctorUser(dto);
-			doctorSpecializationDTO.setSpecializationMaster(specializationMasterDAO.findOne(Long.parseLong(s.getId())));
-			listDoctorSpecializationDTO.add(doctorSpecializationDTO);
-		}
-		doctorSpecializationDAO.save(listDoctorSpecializationDTO);
-		
-		//Doctor specialization
-		List<DoctorDegreeDTO> listDoctorDegreeDTO = Lists.newArrayList();
-		for(Degree d : request.getDoctorUser().getDegrees()) {
-			DoctorDegreeDTO doctorDegreeDTO = new DoctorDegreeDTO();
-			doctorDegreeDTO.setDoctorUserDTO(dto);
-			doctorDegreeDTO.setDegreeMasterDTO(degreeMasterDAO.findOne(Long.parseLong(d.getId())));
-			listDoctorDegreeDTO.add(doctorDegreeDTO);
-		}		
-		doctorDegreeDAO.save(listDoctorDegreeDTO);
-		
-		List<DoctorMciDTO> listDoctorMciDTO = Lists.newArrayList();
-		for(Mci m : request.getDoctorUser().getMciReg()) {
-			DoctorMciDTO doctorMciDTO = new DoctorMciDTO();
-			doctorMciDTO.setDoctorUserDTO(dto);
-			doctorMciDTO.setMciMasterId(mciMasterDAO.findOne(Long.parseLong(m.getId())));
-			doctorMciDTO.setRegistrationNumber(Long.parseLong(m.getRegistrationNumber()));
-			listDoctorMciDTO.add(doctorMciDTO);
-		}
-		
-		doctorMciDAO.save(listDoctorMciDTO);
+		saveDoctorDegrees(request.getDoctorUser().getDegrees(), doctorUserDTO);
+		saveDoctorMcis(request.getDoctorUser().getMciReg(), doctorUserDTO);
+		saveDoctorSpecializations(request.getDoctorUser().getSpecialization(), doctorUserDTO);
 		
 		return ServiceUtils.setResponse(new DoctorUserRegisterResponse(), 
 				true, "Register Doctor User");
 	}
 	
-	private DoctorUserDTO mapDoctorRegisterRequest(DoctorUserRegisterRequest request) {
-		UserDTO dto = UserCommonManagerImpl.mapUserRequestToDTO(request.getDoctorUser());
-		DoctorUserDTO doctorUserDTO = new DoctorUserDTO();
+	private void saveDoctorSpecializations(List<Specialization> listSpecialization, DoctorUserDTO doctorUserDTO) {
+		//Doctor specialization
+		List<DoctorSpecializationDTO> listDoctorSpecializationDTO = Lists.newArrayList();
+		for(Specialization speciliazation : listSpecialization) {
+			DoctorSpecializationDTO doctorSpecializationDTO = new DoctorSpecializationDTO();
+			doctorSpecializationDTO.setDoctorUser(doctorUserDTO);
+			doctorSpecializationDTO.setSpecializationMaster(specializationMasterDAO.findOne(Long.parseLong(speciliazation.getId())));
+			listDoctorSpecializationDTO.add(doctorSpecializationDTO);
+		}
+		doctorSpecializationDAO.save(listDoctorSpecializationDTO);
+	}
+	
+	private void saveDoctorDegrees(List<Degree> listDegree, DoctorUserDTO doctorUserDTO){
+		List<DoctorDegreeDTO> listDoctorDegreeDTO = Lists.newArrayList();
+		for(Degree degree : listDegree) {
+			DoctorDegreeDTO doctorDegreeDTO = new DoctorDegreeDTO();
+			doctorDegreeDTO.setDoctorUserDTO(doctorUserDTO);
+			doctorDegreeDTO.setDegreeMasterDTO(degreeMasterDAO.findOne(Long.parseLong(degree.getId())));
+			listDoctorDegreeDTO.add(doctorDegreeDTO);
+		}
+		
+		doctorDegreeDAO.save(listDoctorDegreeDTO);
+	}
+	
+	private void saveDoctorMcis(List<Mci> listMCI, DoctorUserDTO doctorUserDTO) {
+
+		List<DoctorMciDTO> listDoctorMciDTO = Lists.newArrayList();
+		for(Mci mci : listMCI) {
+			DoctorMciDTO doctorMciDTO = new DoctorMciDTO();
+			doctorMciDTO.setDoctorUserDTO(doctorUserDTO);
+			doctorMciDTO.setMciMasterId(mciMasterDAO.findOne(Long.parseLong(mci.getId())));
+			doctorMciDTO.setRegistrationNumber(Long.parseLong(mci.getRegistrationNumber()));
+			listDoctorMciDTO.add(doctorMciDTO);
+		}
+		
+		doctorMciDAO.save(listDoctorMciDTO);
+	}
+	
+	private DoctorUserDTO mapDoctorRegisterRequest (DoctorUser user, UserDTO userDTO, DoctorUserDTO doctorUserDTO){
+		UserDTO dto = (userDTO == null) ? UserCommonManagerImpl.mapUserRequestToDTO(user, null) : UserCommonManagerImpl.mapUserRequestToDTO(user, userDTO);
+		if(doctorUserDTO == null) doctorUserDTO = new DoctorUserDTO();
 		doctorUserDTO.setUserDTO(dto);
-		doctorUserDTO.setClinicAddress(request.getDoctorUser().getClinicAddress());
-		doctorUserDTO.setClinicContactNumber(request.getDoctorUser().getClinicContactNo());
-		doctorUserDTO.setClinicAlternateContactNumber(null);
-		doctorUserDTO.setPracticeArea(request.getDoctorUser().getPracticeArea());
-		doctorUserDTO.setInPersonConsultant(request.getDoctorUser().getInPersonConsultant());
-		doctorUserDTO.seteConsultant(request.getDoctorUser().getEConsultant());		
+		if(user.getClinicAddress() != null) doctorUserDTO.setClinicAddress(user.getClinicAddress());
+		if(user.getClinicContactNo() != null) doctorUserDTO.setClinicContactNumber(user.getClinicContactNo());
+		if(user.getAlternateContactNo() != null) doctorUserDTO.setClinicAlternateContactNumber(user.getAlternateContactNo());
+		if(user.getPracticeArea()!= null) doctorUserDTO.setPracticeArea(user.getPracticeArea());
+		if(user.getInPersonConsultant() != null) doctorUserDTO.setInPersonConsultant(user.getInPersonConsultant());
+		if(user.getEConsultant() != null) doctorUserDTO.seteConsultant(user.getEConsultant());
 		return doctorUserDTO;
 	}
 	
@@ -171,8 +184,33 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 	
 	@Override
 	public DoctorUserUpdateResponse updateUser(DoctorUserUpdateRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		//UserDTO userDTO = userDAO.checkUIDExist(request.getDoctorUser().getUid());
+		DoctorUserDTO doctorUserDTO = doctorUserDAO.getDetailOfDoctorUser(request.getDoctorUser().getUid());
+		if(doctorUserDTO == null){
+			throw new Exception("User does not exist");
+		}
+		DoctorUserUpdateResponse response = new DoctorUserUpdateResponse();
+		//Check if User mandatory fields need to be updated
+		if(request.getDoctorUser().getUserType() != null){
+			UserDTO userDTO = UserCommonManagerImpl.mapUserRequestToDTO(request.getDoctorUser(), doctorUserDTO.getUserDTO());
+			response.setId(userDTO.getUid());
+			userDTO = userDAO.save(userDTO);
+			return ServiceUtils.setResponse(response, true, "Update doctor user mentatory details");
+		}else{
+			doctorUserDTO = mapDoctorRegisterRequest(request.getDoctorUser(), doctorUserDTO.getUserDTO(), doctorUserDTO);
+			doctorUserDAO.save(doctorUserDTO);
+			if(request.getDoctorUser().getDegrees() != null){
+				saveDoctorDegrees(request.getDoctorUser().getDegrees(), doctorUserDTO);
+			}
+			if(request.getDoctorUser().getMciReg() != null){
+				saveDoctorMcis(request.getDoctorUser().getMciReg(), doctorUserDTO);
+			}
+			if(request.getDoctorUser().getSpecialization() != null){
+				saveDoctorSpecializations(request.getDoctorUser().getSpecialization(), doctorUserDTO);
+			}
+			response.setId(doctorUserDTO.getUserDTO().getUid());
+			return ServiceUtils.setResponse(response, true, "Update doctor user details");
+		}
 	}
 	
 }

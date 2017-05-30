@@ -13,6 +13,7 @@ public interface DoctorUserManager {
 
 	DoctorUserRegisterResponse registerUser(DoctorUserRegisterRequest request) throws Exception;
 	DoctorUserUpdateResponse updateUser(DoctorUserUpdateRequest request) throws Exception;
+
 	ListAllDegreeResponse listAllDegree() throws Exception;
 	ListAllMciResponse listAllMci() throws Exception;
 	ListAllSpecializationResponse listAllSpecialization() throws Exception;
