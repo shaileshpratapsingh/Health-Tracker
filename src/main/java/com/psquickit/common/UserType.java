@@ -1,13 +1,12 @@
 package com.psquickit.common;
 
-
 import java.util.HashSet;
 import java.util.Set;
 
 public enum UserType {
 	
-	IndividualUser("IndividualUser"),
-	DoctorUser("DoctorUser");
+	INDIVIDUAL_USER("IndividualUser"),
+	DOCTOR_USER("DoctorUser");
 	
 	private final String name;
 	private UserType(String name){

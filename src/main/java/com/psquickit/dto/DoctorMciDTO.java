@@ -24,7 +24,7 @@ public class DoctorMciDTO {
 	
 	@ManyToOne
 	@JoinColumn(name = "MciMasterId")
-	private MCIMasterDTO mciMasterId;
+	private MciMasterDTO mciMasterId;
 	
 	@Column(name = "RegistrationNumber")
 	private Long registrationNumber;
@@ -37,11 +37,11 @@ public class DoctorMciDTO {
 		this.id = id;
 	}
 
-	public MCIMasterDTO getMciMasterId() {
+	public MciMasterDTO getMciMasterId() {
 		return mciMasterId;
 	}
 
-	public void setMciMasterId(MCIMasterDTO mciMasterId) {
+	public void setMciMasterId(MciMasterDTO mciMasterId) {
 		this.mciMasterId = mciMasterId;
 	}
 
