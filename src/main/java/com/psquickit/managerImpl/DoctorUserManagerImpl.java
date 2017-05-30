@@ -38,6 +38,7 @@ public class DoctorUserManagerImpl extends CommonManager implements DoctorUserMa
 	@Override
 	public DoctorUserRegisterResponse registerUser(DoctorUserRegisterRequest request) throws Exception {
 		logger.info("Reaching in manager");
+		DoctorUserRegisterResponse response = new DoctorUserRegisterResponse();
 		UserDTO userDTO = userDAO.checkUIDExist(request.getDoctorUser().getUid());
 		if(userDTO != null){
 			throw new DuplicateUserException("User already exist. Please try again with different UID");
@@ -48,7 +49,8 @@ public class DoctorUserManagerImpl extends CommonManager implements DoctorUserMa
 		saveDoctorDegrees(request.getDoctorUser().getDegrees(), doctorUserDTO);
 		saveDoctorMcis(request.getDoctorUser().getMciReg(), doctorUserDTO);
 		saveDoctorSpecializations(request.getDoctorUser().getSpecialization(), doctorUserDTO);
-		return ServiceUtils.setResponse(new DoctorUserRegisterResponse(), 
+		response.setId(doctorUserDTO.getUserDTO().getUid());
+		return ServiceUtils.setResponse(response, 
 				true, "Register Doctor User");
 	}
 	

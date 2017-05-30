@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.psquickit.manager.IndividualUserManager;
 import com.psquickit.pojo.IndividualUserRegisterRequest;
 import com.psquickit.pojo.IndividualUserRegisterResponse;
+import com.psquickit.pojo.IndividualUserUpdateRequest;
+import com.psquickit.pojo.IndividualUserUpdateResponse;
 import com.psquickit.util.ServiceUtils;
 
 @RestController
@@ -32,11 +34,11 @@ public class IndividualUserController {
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public @ResponseBody IndividualUserRegisterResponse updateUser(
-			@RequestBody IndividualUserRegisterRequest request) {
-		IndividualUserRegisterResponse response = new IndividualUserRegisterResponse();
+	public @ResponseBody IndividualUserUpdateResponse updateUser(
+			@RequestBody IndividualUserUpdateRequest request) {
+		IndividualUserUpdateResponse response = new IndividualUserUpdateResponse();
 		try {
-			response = manager.registerUser(request);
+			response = manager.updateUser(request);
 		} catch (Exception e) {
 			return ServiceUtils.setResponse(response, false, "User Registration", e);
 		}
