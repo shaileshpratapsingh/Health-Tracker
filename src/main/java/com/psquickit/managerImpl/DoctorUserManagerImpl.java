@@ -5,8 +5,6 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
-import com.psquickit.common.DuplicateUserException;
-import com.psquickit.common.UserNotFoundException;
 import com.psquickit.dto.DegreeMasterDTO;
 import com.psquickit.dto.DoctorDegreeDTO;
 import com.psquickit.dto.DoctorMciDTO;
@@ -41,7 +39,7 @@ public class DoctorUserManagerImpl extends CommonManager implements DoctorUserMa
 		DoctorUserRegisterResponse response = new DoctorUserRegisterResponse();
 		UserDTO userDTO = userDAO.checkUIDExist(request.getDoctorUser().getUid());
 		if(userDTO != null){
-			throw new DuplicateUserException("User already exist. Please try again with different UID");
+			throw new Exception("User already exist. Please try again with different UID");
 		}
 		DoctorUserDTO doctorUserDTO = mapDoctorRegisterRequest(request.getDoctorUser(), null, null);
 		
@@ -155,7 +153,7 @@ public class DoctorUserManagerImpl extends CommonManager implements DoctorUserMa
 		//UserDTO userDTO = userDAO.checkUIDExist(request.getDoctorUser().getUid());
 		DoctorUserDTO doctorUserDTO = doctorUserDAO.getDetailOfDoctorUser(request.getDoctorUser().getUid());
 		if(doctorUserDTO == null){
-			throw new UserNotFoundException("User does not exist");
+			throw new Exception("User does not exist");
 		}
 		DoctorUserUpdateResponse response = new DoctorUserUpdateResponse();
 		//Check if User mandatory fields need to be updated

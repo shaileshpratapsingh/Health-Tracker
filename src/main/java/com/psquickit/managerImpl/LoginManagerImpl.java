@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.psquickit.common.UserNotFoundException;
 import com.psquickit.dto.DoctorDegreeDTO;
 import com.psquickit.dto.DoctorMciDTO;
 import com.psquickit.dto.DoctorSpecializationDTO;
@@ -24,7 +23,7 @@ public class LoginManagerImpl extends CommonManager implements LoginManager {
 	public UserLoginResponse login(String uid) throws Exception {
 		UserDTO userDTO = userDAO.checkUIDExist(uid);
 		if(userDTO == null){
-			throw new UserNotFoundException("User does not exist");
+			throw new Exception("User does not exist");
 		}
 		UserLoginResponse response = mapUserDTOToResponse(userDTO);
 		if(response.getUserDetails().getUserType() == "DoctorUser") {

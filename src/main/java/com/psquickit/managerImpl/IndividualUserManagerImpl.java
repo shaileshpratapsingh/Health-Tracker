@@ -4,8 +4,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.psquickit.common.DuplicateUserException;
-import com.psquickit.common.UserNotFoundException;
 import com.psquickit.dao.UserDAO;
 import com.psquickit.dto.UserDTO;
 import com.psquickit.manager.CommonManager;
@@ -30,7 +28,7 @@ public class IndividualUserManagerImpl extends CommonManager implements Individu
 		IndividualUserRegisterResponse response = new IndividualUserRegisterResponse();
 		UserDTO userDTO = userDAO.checkUIDExist(request.getIndividualUser().getUid());
 		if(userDTO != null){
-			throw new DuplicateUserException("User already exist. Please try again with different UID");
+			throw new Exception("User already exist. Please try again with different UID");
 		}
 		userDTO = mapUserRequestToDTO(request.getIndividualUser(), null);
 		userDAO.save(userDTO);
@@ -43,7 +41,7 @@ public class IndividualUserManagerImpl extends CommonManager implements Individu
 	public IndividualUserUpdateResponse updateUser(IndividualUserUpdateRequest request) throws Exception {
 		UserDTO userDTO = userDAO.checkUIDExist(request.getIndividualUser().getUid());
 		if(userDTO == null){
-			throw new UserNotFoundException("User doesn't exist.");
+			throw new Exception("User doesn't exist.");
 		}
 		IndividualUserUpdateResponse response = new IndividualUserUpdateResponse();
 		userDTO = mapUserRequestToDTO(request.getIndividualUser(), userDTO);
