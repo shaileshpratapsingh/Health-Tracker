@@ -74,7 +74,7 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 			throw new HandledException("DUPLICATE_USER_REGISTRATION", 
 					"Duplicate User Registration");
 		}
-		DoctorUserDTO doctorUserDTO = mapDoctorRegisterRequest(request.getDoctorUser(), null, null);
+		DoctorUserDTO doctorUserDTO = mapDoctorRegisterRequest(request.getDoctorUser(), null);
 		
 		doctorUserDTO = doctorUserDAO.save(doctorUserDTO);
 		
@@ -124,16 +124,18 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 		doctorMciDAO.save(listDoctorMciDTO);
 	}
 	
-	private DoctorUserDTO mapDoctorRegisterRequest (DoctorUser user, UserDTO userDTO, DoctorUserDTO doctorUserDTO){
-		UserDTO dto = (userDTO == null) ? UserCommonManagerImpl.mapUserRequestToDTO(user, null) : UserCommonManagerImpl.mapUserRequestToDTO(user, userDTO);
-		if(doctorUserDTO == null) doctorUserDTO = new DoctorUserDTO();
-		doctorUserDTO.setUserDTO(dto);
-		if(user.getClinicAddress() != null) doctorUserDTO.setClinicAddress(user.getClinicAddress());
-		if(user.getClinicContactNo() != null) doctorUserDTO.setClinicContactNumber(user.getClinicContactNo());
-		if(user.getAlternateContactNo() != null) doctorUserDTO.setClinicAlternateContactNumber(user.getAlternateContactNo());
-		if(user.getPracticeArea()!= null) doctorUserDTO.setPracticeArea(user.getPracticeArea());
-		if(user.getInPersonConsultant() != null) doctorUserDTO.setInPersonConsultant(user.getInPersonConsultant());
-		if(user.getEConsultant() != null) doctorUserDTO.seteConsultant(user.getEConsultant());
+	private DoctorUserDTO mapDoctorRegisterRequest(DoctorUser user, DoctorUserDTO doctorUserDTO){
+		if(doctorUserDTO == null){
+			doctorUserDTO = new DoctorUserDTO();
+		}
+		UserDTO userDTO = UserCommonManagerImpl.mapUserRequestToDTO(user, doctorUserDTO.getUserDTO());
+		doctorUserDTO.setUserDTO(userDTO);
+		doctorUserDTO.setClinicAddress(user.getClinicAddress());
+		doctorUserDTO.setClinicContactNumber(user.getClinicContactNo());
+		doctorUserDTO.setClinicAlternateContactNumber(user.getAlternateContactNo());
+		doctorUserDTO.setPracticeArea(user.getPracticeArea());
+		doctorUserDTO.setInPersonConsultant(user.getInPersonConsultant());
+		doctorUserDTO.seteConsultant(user.getEConsultant());
 		return doctorUserDTO;
 	}
 	
@@ -197,7 +199,7 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 			userDTO = userDAO.save(userDTO);
 			return ServiceUtils.setResponse(response, true, "Update doctor user mentatory details");
 		}else{
-			doctorUserDTO = mapDoctorRegisterRequest(request.getDoctorUser(), doctorUserDTO.getUserDTO(), doctorUserDTO);
+			doctorUserDTO = mapDoctorRegisterRequest(request.getDoctorUser(), doctorUserDTO);
 			doctorUserDAO.save(doctorUserDTO);
 			if(request.getDoctorUser().getDegrees() != null){
 				saveDoctorDegrees(request.getDoctorUser().getDegrees(), doctorUserDTO);

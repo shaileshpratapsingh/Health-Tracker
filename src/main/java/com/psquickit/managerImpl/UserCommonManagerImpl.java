@@ -11,17 +11,17 @@ public class UserCommonManagerImpl {
 
 	public static UserDTO mapUserRequestToDTO(User user, UserDTO userDTO) {
 		if(userDTO == null) userDTO = new UserDTO();
-		if(user.getUid() != null) userDTO.setUid(user.getUid());
-		if(user.getFirstName() != null) userDTO.setFirstName(user.getFirstName());
-		if(user.getLastName()!= null) userDTO.setLastName(user.getLastName());
-		if(user.getContactNo() != null) userDTO.setContactNumber(user.getContactNo());
-		if(user.getAlternateContactNo() != null) userDTO.setAlternateContactNumber(user.getAlternateContactNo());
-		if(user.getAlternateAddress() != null) userDTO.setAlternateAddress(user.getAlternateAddress());
-		if(user.getPermanentAddress() != null) userDTO.setPermanentAddress(user.getPermanentAddress());
-		if(user.getAge() != null) userDTO.setAge(user.getAge());
-		if(user.getGender() != null) userDTO.setGender(user.getGender());
-		if(user.getEmail() != null) userDTO.setEmail(user.getEmail());
-		if(user.getUserType() != null) userDTO.setUserType(UserType.fromName(user.getUserType()).getName());
+		userDTO.setUid(user.getUid());
+		userDTO.setFirstName(user.getFirstName());
+		userDTO.setLastName(user.getLastName());
+		userDTO.setContactNumber(user.getContactNo());
+		userDTO.setAlternateContactNumber(user.getAlternateContactNo());
+		userDTO.setAlternateAddress(user.getAlternateAddress());
+		userDTO.setPermanentAddress(user.getPermanentAddress());
+		userDTO.setAge(user.getAge());
+		userDTO.setGender(user.getGender());
+		userDTO.setEmail(user.getEmail());
+		userDTO.setUserType(UserType.fromName(user.getUserType()).getName());
 		
 		if(user.getProfileImg() != null) {
 			//TODO- change logic to save file on filestore
