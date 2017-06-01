@@ -3,7 +3,6 @@ package com.psquickit.dto;
 import java.io.Serializable;
 import javax.persistence.*;
 
-
 /**
  * The persistent class for the filestore database table.
  * 
@@ -11,18 +10,29 @@ import javax.persistence.*;
 @Entity
 @Table(name = "filestore")
 public class FileStoreDTO implements Serializable {
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID", unique = true, nullable = false)
 	private Long id;
-	
+
 	@Column(name = "Location")
 	private String location;
-	
+
 	@Column(name = "DocumentType")
 	private String documentType;
+	
+	@Column(name = "name")
+	private String name;
 
 	public Long getId() {
 		return id;

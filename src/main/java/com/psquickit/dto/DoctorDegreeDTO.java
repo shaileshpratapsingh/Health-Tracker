@@ -1,10 +1,15 @@
 package com.psquickit.dto;
 
 import java.io.Serializable;
-import java.security.DomainLoadStoreParameter;
 
-import javax.persistence.*;
-
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  * The persistent class for the doctordegree database table.
@@ -19,11 +24,11 @@ public class DoctorDegreeDTO implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID", unique = true, nullable = false)
 	private Long id;
-	
+
 	@ManyToOne
-	@JoinColumn(name="DoctorUserId")
+	@JoinColumn(name = "DoctorUserId")
 	private DoctorUserDTO doctorUserDTO;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "DegreeMasterId")
 	private DegreeMasterDTO degreeMasterDTO;

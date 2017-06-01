@@ -1,10 +1,13 @@
 package com.psquickit.controller;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.psquickit.manager.DoctorUserManager;
 import com.psquickit.pojo.DoctorUserRegisterRequest;
@@ -23,30 +26,33 @@ public class DoctorUserController {
 	@Autowired
 	DoctorUserManager doctorUserManger;
 
-	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public @ResponseBody DoctorUserRegisterResponse registerUser(@RequestBody DoctorUserRegisterRequest request) {
+	@RequestMapping(value = "/register", method = RequestMethod.POST, headers = "content-type=multipart/form-data")
+	public @ResponseBody DoctorUserRegisterResponse registerUser(
+			@RequestPart(value="profilePic", required=false) MultipartFile profilePic,
+			@RequestPart(value = "doctorRegistration", required=true) DoctorUserRegisterRequest request) {
 		DoctorUserRegisterResponse response = new DoctorUserRegisterResponse();
 		try {
-			response = doctorUserManger.registerUser(request);
+			response = doctorUserManger.registerUser(request, profilePic);
 		} catch (Exception e) {
 			return ServiceUtils.setResponse(response, false, "Doctor User Registration", e);
 		}
 		return response;
 	}
-	
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public @ResponseBody DoctorUserUpdateResponse updateUser(@RequestBody DoctorUserUpdateRequest request) {
+
+	@RequestMapping(value = "/update", method = RequestMethod.POST, headers = "content-type=multipart/form-data")
+	public @ResponseBody DoctorUserUpdateResponse updateUser(@RequestBody DoctorUserUpdateRequest request,
+			@RequestPart("profilePic") MultipartFile profilePic) {
 		DoctorUserUpdateResponse response = new DoctorUserUpdateResponse();
 		try {
-			response = doctorUserManger.updateUser(request);
+			response = doctorUserManger.updateUser(request, profilePic);
 		} catch (Exception e) {
 			return ServiceUtils.setResponse(response, false, "Doctor User Registration", e);
 		}
 		return response;
 	}
-	
+
 	@RequestMapping(value = "/list/degree", method = RequestMethod.GET)
-	@ResponseBody public ListAllDegreeResponse listAllDegrees(){
+	public @ResponseBody ListAllDegreeResponse listAllDegrees() {
 		ListAllDegreeResponse response = new ListAllDegreeResponse();
 		try {
 			response = doctorUserManger.listAllDegree();
@@ -55,9 +61,9 @@ public class DoctorUserController {
 		}
 		return response;
 	}
-	
+
 	@RequestMapping(value = "/list/mci", method = RequestMethod.GET)
-	@ResponseBody public ListAllMciResponse listAllMci(){
+	public @ResponseBody ListAllMciResponse listAllMci() {
 		ListAllMciResponse response = new ListAllMciResponse();
 		try {
 			response = doctorUserManger.listAllMci();
@@ -66,9 +72,9 @@ public class DoctorUserController {
 		}
 		return response;
 	}
-	
+
 	@RequestMapping(value = "/list/specialization", method = RequestMethod.GET)
-	@ResponseBody public ListAllSpecializationResponse listAllSpecialization(){
+	public @ResponseBody ListAllSpecializationResponse listAllSpecialization() {
 		ListAllSpecializationResponse response = new ListAllSpecializationResponse();
 		try {
 			response = doctorUserManger.listAllSpecialization();

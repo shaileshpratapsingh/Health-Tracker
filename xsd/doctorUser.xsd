@@ -8,10 +8,9 @@
 	<xs:import namespace="http://api.psquickit.com/individualUser"
 		schemaLocation="individualUser.xsd" />
 
-
-	<xs:complexType name="doctorUser">
+	<xs:complexType name="doctorUserDetails">
 		<xs:complexContent>
-			<xs:extension base="ns2:user">
+			<xs:extension base="ns2:basicUserDetails">
 				<xs:sequence>
 					<xs:element name="clinicAddress" type="xs:string" />
 					<xs:element name="practiceArea" type="xs:string" />
@@ -20,8 +19,7 @@
 					<xs:element name="clinicContactNo" type="xs:string" />
 					<xs:element name="degrees" type="tns:degree" maxOccurs="unbounded" />
 					<xs:element name="mciReg" type="tns:mci" maxOccurs="unbounded" />
-					<xs:element name="specialization" type="tns:specialization"
-						maxOccurs="unbounded" />
+					<xs:element name="specialization" type="tns:specialization" maxOccurs="unbounded" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -29,13 +27,11 @@
 	
 	<xs:element name="doctorUserRegisterRequest">
 		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="doctorUser" type="tns:doctorUser" />
-			</xs:sequence>
+			<xs:complexContent>
+				<xs:extension base="tns:doctorUserDetails"/>
+			</xs:complexContent>		
 		</xs:complexType>
 	</xs:element>
-	
-
 	<xs:element name="doctorUserRegisterResponse">
 		<xs:complexType>
 			<xs:complexContent>
@@ -50,13 +46,11 @@
 	
 	<xs:element name="doctorUserUpdateRequest">
 		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="doctorUser" type="tns:doctorUser" />
-			</xs:sequence>
+			<xs:complexContent>
+				<xs:extension base="tns:doctorUserDetails"/>
+			</xs:complexContent>		
 		</xs:complexType>
 	</xs:element>
-	
-
 	<xs:element name="doctorUserUpdateResponse">
 		<xs:complexType>
 			<xs:complexContent>
@@ -81,7 +75,7 @@
 			<xs:complexContent>
 				<xs:extension base="ns1:genericServiceResponse">
 					<xs:sequence>
-						<xs:element name="doctorUser" type="tns:doctorUser" />
+						<xs:element name="doctorUser" type="tns:doctorUserDetails" />
 					</xs:sequence>
 				</xs:extension>
 			</xs:complexContent>
@@ -130,7 +124,6 @@
 		<xs:sequence>
 			<xs:element name="id" type="xs:string" />
 			<xs:element name="title" type="xs:string" />
-			<xs:element name="registrationNumber" type="xs:string" />
 		</xs:sequence>
 	</xs:complexType>
 
@@ -146,25 +139,18 @@
 		</xs:complexType>
 	</xs:element>
 	
-	<xs:element name="userLoginRequest">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="uid" type="xs:string" />
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-
-	<xs:element name="userLoginResponse">
+	<xs:element name="doctorDetailResponse">
 		<xs:complexType>
 			<xs:complexContent>
 				<xs:extension base="ns1:genericServiceResponse">
 					<xs:sequence>
-						<xs:element name="userDetails" type="tns:doctorUser" />
+						<xs:element name="doctorUserDetails" type="tns:doctorUserDetails" />
 					</xs:sequence>
 				</xs:extension>
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
+	
 </xs:schema>
 	
 	

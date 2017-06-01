@@ -18,42 +18,41 @@ public class UserDTO {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID", unique = true, nullable = false)
 	private Long id;
-	
-	
+
 	@Column(name = "AdhaarNumber", length = 50)
 	private String uid;
-	
+
 	@Column(name = "FirstName", length = 50)
 	private String firstName;
-	
+
 	@Column(name = "age", length = 50)
 	private String age;
-	
+
 	@Column(name = "gender", length = 50)
 	private String gender;
-	
+
 	@Column(name = "LastName", length = 50)
 	private String lastName;
-	
+
 	@Column(name = "Email", length = 50)
 	private String email;
-	
-	@Column(name = "ContactNumber",  length = 50)
+
+	@Column(name = "ContactNumber", length = 50)
 	private String contactNumber;
-	
+
 	@Column(name = "AlternateContactNumber", length = 50)
 	private String alternateContactNumber;
-	
+
 	@Column(name = "PermanentAddress", length = 500)
 	private String permanentAddress;
-	
+
 	@Column(name = "AlternateAddress", length = 500)
 	private String alternateAddress;
-	
+
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "ProfileImageFileStoreId" )
+	@JoinColumn(name = "ProfileImageFileStoreId")
 	private FileStoreDTO profileImageFileStoreId;
-	
+
 	@Column(name = "UserType", length = 500)
 	private String userType;
 
@@ -64,7 +63,7 @@ public class UserDTO {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
 	public String getUid() {
 		return uid;
 	}
@@ -72,7 +71,7 @@ public class UserDTO {
 	public void setUid(String uid) {
 		this.uid = uid;
 	}
-	
+
 	public String getFirstName() {
 		return firstName;
 	}
@@ -160,7 +159,5 @@ public class UserDTO {
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
-	
-	
-	
+
 }

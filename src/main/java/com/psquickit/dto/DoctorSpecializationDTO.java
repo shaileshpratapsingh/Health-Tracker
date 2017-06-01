@@ -12,20 +12,19 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-
 @Entity
 @Table(name = "doctorspecialization")
-public class DoctorSpecializationDTO implements Serializable{
-	
+public class DoctorSpecializationDTO implements Serializable {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID", unique = true, nullable = false)
 	private Long id;
-	
+
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "DoctorUserId")
 	private DoctorUserDTO doctorUser;
-	
+
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "SpecializationMasterId")
 	private SpecializationMasterDTO specializationMaster;

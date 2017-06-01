@@ -9,7 +9,7 @@ import com.psquickit.dto.UserDTO;
 
 @Repository
 public interface UserDAO extends JpaRepository<UserDTO, Long> {
-	
+
 	@Query("Select u from UserDTO u where u.uid = :uid")
 	public UserDTO checkUIDExist(@Param("uid") String uid);
 }

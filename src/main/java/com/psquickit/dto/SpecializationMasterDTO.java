@@ -3,7 +3,6 @@ package com.psquickit.dto;
 import java.io.Serializable;
 import javax.persistence.*;
 
-
 /**
  * The persistent class for the specializationmaster database table.
  * 
@@ -17,7 +16,7 @@ public class SpecializationMasterDTO implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID", unique = true, nullable = false)
 	private Long id;
-	
+
 	@Column(name = "SpecializationName")
 	private String specializationName;
 
@@ -40,7 +39,5 @@ public class SpecializationMasterDTO implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	
-	
 
 }

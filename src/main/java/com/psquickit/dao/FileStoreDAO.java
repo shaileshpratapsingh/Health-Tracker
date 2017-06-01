@@ -3,9 +3,9 @@ package com.psquickit.dao;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.psquickit.dto.DegreeMasterDTO;
+import com.psquickit.dto.FileStoreDTO;
 
 @Repository
-public interface DegreeMasterDAO extends JpaRepository<DegreeMasterDTO, Long> {
+public interface FileStoreDAO extends JpaRepository<FileStoreDTO, Long> {
 
 }

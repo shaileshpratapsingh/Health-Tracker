@@ -10,12 +10,12 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "mcimaster")
 public class MciMasterDTO {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID", unique = true, nullable = false)
 	private Long id;
-	
+
 	@Column(name = "MciName")
 	private String mciName;
 
@@ -34,7 +34,5 @@ public class MciMasterDTO {
 	public void setMciName(String mciName) {
 		this.mciName = mciName;
 	}
-	
-	
-	
+
 }

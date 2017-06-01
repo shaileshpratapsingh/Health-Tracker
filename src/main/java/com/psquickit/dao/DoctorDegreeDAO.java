@@ -10,8 +10,8 @@ import org.springframework.stereotype.Repository;
 import com.psquickit.dto.DoctorDegreeDTO;
 
 @Repository
-public interface DoctorDegreeDAO  extends JpaRepository<DoctorDegreeDTO, Long>{
-	
+public interface DoctorDegreeDAO extends JpaRepository<DoctorDegreeDTO, Long> {
+
 	@Query("Select d from DoctorDegreeDTO d where d.doctorUserDTO.id = :id")
 	public List<DoctorDegreeDTO> getDoctorDegrees(@Param("id") Long uid);
 }

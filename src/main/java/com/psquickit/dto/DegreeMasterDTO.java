@@ -3,7 +3,6 @@ package com.psquickit.dto;
 import java.io.Serializable;
 import javax.persistence.*;
 
-
 /**
  * The persistent class for the degreemaster database table.
  * 
@@ -17,7 +16,7 @@ public class DegreeMasterDTO implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID", unique = true, nullable = false)
 	private Long id;
-	
+
 	@Column(name = "DegreeName")
 	private String degreeName;
 

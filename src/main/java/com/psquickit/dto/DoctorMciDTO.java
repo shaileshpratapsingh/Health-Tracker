@@ -12,20 +12,20 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "doctormci")
 public class DoctorMciDTO {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID", unique = true, nullable = false)
 	private Long id;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "DoctorUserId")
 	private DoctorUserDTO doctorUserDTO;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "MciMasterId")
 	private MciMasterDTO mciMasterId;
-	
+
 	@Column(name = "RegistrationNumber")
 	private Long registrationNumber;
 
@@ -60,6 +60,5 @@ public class DoctorMciDTO {
 	public void setDoctorUserDTO(DoctorUserDTO doctorUserDTO) {
 		this.doctorUserDTO = doctorUserDTO;
 	}
-	
-	
+
 }

@@ -15,10 +15,10 @@ import com.psquickit.util.ServiceUtils;
 @RestController
 @RequestMapping("/login")
 public class LoginController {
-	
+
 	@Autowired
 	LoginManager loginManager;
-	
+
 	@RequestMapping(value = "/user", method = RequestMethod.PUT)
 	public @ResponseBody UserLoginResponse registerUser(@RequestBody UserLoginRequest request) {
 		UserLoginResponse response = new UserLoginResponse();
@@ -29,7 +29,5 @@ public class LoginController {
 		}
 		return response;
 	}
-
-	
 
 }

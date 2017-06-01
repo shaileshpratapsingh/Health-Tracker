@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.psquickit.dto.MciMasterDTO;
 
 @Repository
-public interface MCIMasterDAO extends JpaRepository< MciMasterDTO, Long>{
+public interface MCIMasterDAO extends JpaRepository<MciMasterDTO, Long> {
 
 }

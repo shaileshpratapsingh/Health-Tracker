@@ -3,14 +3,13 @@ package com.psquickit.dto;
 import java.io.Serializable;
 import javax.persistence.*;
 
-
 /**
  * The persistent class for the doctoruser database table.
  * 
  */
 @Entity
 @Table(name = "doctoruser")
-@NamedQuery(name="DoctorUser.findAll", query="SELECT d FROM DoctorUserDTO d")
+@NamedQuery(name = "DoctorUser.findAll", query = "SELECT d FROM DoctorUserDTO d")
 public class DoctorUserDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -18,26 +17,26 @@ public class DoctorUserDTO implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID", unique = true, nullable = false)
 	private Long id;
-	
+
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "UserId")
 	private UserDTO userDTO;
-	
+
 	@Column(name = "ClinicAddress")
 	private String clinicAddress;
-	
+
 	@Column(name = "ClinicContactNumber")
 	private String clinicContactNumber;
-	
+
 	@Column(name = "ClinicAlternateContactNumber")
 	private String clinicAlternateContactNumber;
-	
+
 	@Column(name = "PracticeArea")
 	private String practiceArea;
-	
+
 	@Column(name = "InPersonConsultant")
 	private String inPersonConsultant;
-	
+
 	@Column(name = "EConsultant")
 	private String eConsultant;
 

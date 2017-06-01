@@ -6,8 +6,7 @@
 	<xs:import namespace="http://api.psquickit.com/common"
 		schemaLocation="generic-service-response.xsd" />
 
-
-	<xs:complexType name="user">
+	<xs:complexType name="basicUserDetails">
 		<xs:sequence>
 			<xs:element name="uid" type="xs:string" />
 			<xs:element name="firstName" type="xs:string"/>
@@ -23,15 +22,14 @@
 			<xs:element name="email" type="xs:string" />
 		</xs:sequence>
 	</xs:complexType>
+	
 	<xs:element name="individualUserRegisterRequest">
 		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="individualUser" type="tns:user" />
-			</xs:sequence>
+			<xs:complexContent>
+				<xs:extension base="tns:basicUserDetails"/>
+			</xs:complexContent>		
 		</xs:complexType>
 	</xs:element>
-
-
 	<xs:element name="individualUserRegisterResponse">
 		<xs:complexType>
 			<xs:complexContent>
@@ -46,13 +44,11 @@
 	
 	<xs:element name="individualUserUpdateRequest">
 		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="individualUser" type="tns:user" />
-			</xs:sequence>
+			<xs:complexContent>
+				<xs:extension base="tns:basicUserDetails"/>
+			</xs:complexContent>		
 		</xs:complexType>
 	</xs:element>
-
-
 	<xs:element name="individualUserUpdateResponse">
 		<xs:complexType>
 			<xs:complexContent>
@@ -65,7 +61,37 @@
 		</xs:complexType>
 	</xs:element>
 
+	<xs:element name="userLoginRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="uid" type="xs:string" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="userLoginResponse">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="ns1:genericServiceResponse">
+					<xs:sequence>
+						<xs:element name="authToken" type="xs:string" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
 	
+	
+	<xs:element name="userDetailResponse">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="ns1:genericServiceResponse">
+					<xs:sequence>
+						<xs:element name="userDetails" type="tns:basicUserDetails" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
 
 </xs:schema>
 	

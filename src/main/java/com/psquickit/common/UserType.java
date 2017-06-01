@@ -4,15 +4,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 public enum UserType {
-	
-	INDIVIDUAL_USER("IndividualUser"),
-	DOCTOR_USER("DoctorUser");
-	
+
+	INDIVIDUAL_USER("IndividualUser"), DOCTOR_USER("DoctorUser");
+
 	private final String name;
-	private UserType(String name){
-		this.name=name;
+
+	private UserType(String name) {
+		this.name = name;
 	}
-	 
+
 	static {
 		ensureUniqueIDs();
 	}
@@ -25,11 +25,11 @@ public enum UserType {
 			}
 		}
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public static UserType fromName(String name) {
 		for (UserType s : values()) {
 			if (s.name.equalsIgnoreCase(name)) {
@@ -38,6 +38,5 @@ public enum UserType {
 		}
 		throw new IllegalArgumentException("Invalid user type: " + name);
 	}
-	
-}
 
+}
