@@ -1,7 +1,6 @@
 package com.psquickit.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -44,8 +43,8 @@ public class DoctorUserController {
 	@RequestMapping(value = "/update", method = RequestMethod.POST, headers = "content-type=multipart/form-data")
 	public @ResponseBody DoctorUserUpdateResponse updateUser(
 			@RequestHeader(value="authToken", required=true) String authToken,
-			@RequestBody DoctorUserUpdateRequest request,
-			@RequestPart("profilePic") MultipartFile profilePic) {
+			@RequestPart(value="profilePic", required=false) MultipartFile profilePic,
+			@RequestPart(value = "doctorUpdate", required=true) DoctorUserUpdateRequest request) {
 		DoctorUserUpdateResponse response = new DoctorUserUpdateResponse();
 		try {
 			response = manager.updateUser(authToken, request, profilePic);

@@ -3,6 +3,7 @@ package com.psquickit.managerImpl;
 import java.io.OutputStream;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,7 @@ public class IndividualUserManagerImpl implements IndividualUserManager {
 	AuthenticationManager authManager;
 	
 	@Override
+	@Transactional(rollbackOn=Exception.class)
 	public IndividualUserRegisterResponse registerUser(IndividualUserRegisterRequest request,
 			MultipartFile profilePic) throws Exception {
 		IndividualUserRegisterResponse response = new IndividualUserRegisterResponse();
@@ -62,6 +64,7 @@ public class IndividualUserManagerImpl implements IndividualUserManager {
 	}
 
 	@Override
+	@Transactional(rollbackOn=Exception.class)
 	public IndividualUserUpdateResponse updateUser(String authToken, IndividualUserUpdateRequest request,
 			MultipartFile profilePic) throws Exception {
 		
@@ -92,6 +95,7 @@ public class IndividualUserManagerImpl implements IndividualUserManager {
 	}
 	
 	@Override
+	@Transactional
 	public UserDetailResponse getUserDetail(String authToken) throws Exception {
 		UserDetailResponse response = new UserDetailResponse();
 		long userId = authManager.getUserId(authToken);
@@ -101,6 +105,7 @@ public class IndividualUserManagerImpl implements IndividualUserManager {
 	}
 	
 	@Override
+	@Transactional
 	public void getProfilePhoto(String authToken, HttpServletResponse httpResponse) throws Exception {
 		long userId = authManager.getUserId(authToken);
 		UserDTO dto = userDAO.findOne(userId);

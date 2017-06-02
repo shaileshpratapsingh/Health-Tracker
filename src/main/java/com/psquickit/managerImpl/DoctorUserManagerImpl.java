@@ -2,6 +2,8 @@ package com.psquickit.managerImpl;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -83,6 +85,7 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 	AuthenticationManager authManager;
 
 	@Override
+	@Transactional(rollbackOn=Exception.class)
 	public DoctorUserRegisterResponse registerUser(DoctorUserRegisterRequest request, MultipartFile profilePic)
 			throws Exception {
 		UserDTO userDTO = userDAO.checkUIDExist(request.getUid());
@@ -95,13 +98,18 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 			profilePicFileStoreDTO = fileStoreManager.uploadFile(profilePic.getInputStream(), profilePic.getContentType(), profilePic.getOriginalFilename());
 		}
 		
-		DoctorUserDTO doctorUserDTO = createDoctorDTO(request, profilePicFileStoreDTO);
+		userDTO = UserCommonManagerImpl.createUserDTO(request, profilePicFileStoreDTO);
+		userDTO = userDAO.save(userDTO);
+		
+		DoctorUserDTO doctorUserDTO = createDoctorDTO(request, userDTO, profilePicFileStoreDTO);
 		doctorUserDTO = doctorUserDAO.save(doctorUserDTO);
 		saveDoctorDegrees(request.getDegrees(), doctorUserDTO);
 		saveDoctorMcis(request.getMciReg(), doctorUserDTO);
 		saveDoctorSpecializations(request.getSpecialization(), doctorUserDTO);
-
-		return ServiceUtils.setResponse(new DoctorUserRegisterResponse(), true, "Register Doctor User");
+		
+		DoctorUserRegisterResponse response = new DoctorUserRegisterResponse();
+		response.setId(Long.toString(doctorUserDTO.getId()));
+		return ServiceUtils.setResponse(response, true, "Register Doctor User");
 	}
 
 	private void saveDoctorSpecializations(List<DoctorSpecialization> listSpecialization, DoctorUserDTO doctorUserDTO) {
@@ -138,13 +146,13 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 		doctorMciDAO.save(listDoctorMciDTO);
 	}
 
-	private <T extends DoctorUserDetails> DoctorUserDTO createDoctorDTO(T request, FileStoreDTO profilePicFileStoreDTO) {
-		UserDTO userDTO = UserCommonManagerImpl.createUserDTO(request, profilePicFileStoreDTO);
+	private <T extends DoctorUserDetails> DoctorUserDTO createDoctorDTO(T request, UserDTO userDTO, FileStoreDTO profilePicFileStoreDTO) {
 		DoctorUserDTO doctorUserDTO = new DoctorUserDTO();
 		return updateDoctorUserDTO(request, doctorUserDTO, userDTO);
 	}
 
 	@Override
+	@Transactional
 	public ListAllDegreeResponse listAllDegree() throws Exception {
 		ListAllDegreeResponse response = new ListAllDegreeResponse();
 		List<DegreeMasterDTO> degreeMasterDTO = degreeMasterDAO.findAll();
@@ -160,6 +168,7 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 	}
 
 	@Override
+	@Transactional
 	public ListAllMciResponse listAllMci() throws Exception {
 		ListAllMciResponse response = new ListAllMciResponse();
 		List<MciMasterDTO> listMciMasterDTO = mciMasterDAO.findAll();
@@ -175,6 +184,7 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 	}
 
 	@Override
+	@Transactional
 	public ListAllSpecializationResponse listAllSpecialization() throws Exception {
 		ListAllSpecializationResponse response = new ListAllSpecializationResponse();
 		List<SpecializationMasterDTO> listSplMasterDTO = specializationMasterDAO.findAll();
@@ -190,6 +200,7 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 	}
 
 	@Override
+	@Transactional(rollbackOn=Exception.class)
 	public DoctorUserUpdateResponse updateUser(String authToken, DoctorUserUpdateRequest request, MultipartFile profilePic)
 			throws Exception {
 		long userId = authManager.getUserId(authToken);
@@ -257,11 +268,12 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 	}
 	
 	@Override
+	@Transactional
 	public DoctorUserDetailResponse getDoctorUserDetail(String authToken) throws Exception {
 		DoctorUserDetailResponse response = new DoctorUserDetailResponse();
 		long userId = authManager.getUserId(authToken);
 		UserDTO userDTO = userDAO.findOne(userId);
-		if (UserType.valueOf(userDTO.getUserType()) == UserType.DOCTOR_USER) {
+		if (UserType.fromName(userDTO.getUserType()) == UserType.DOCTOR_USER) {
 			DoctorUserDTO doctorUserDTO = doctorUserDAO.getDoctorUserByUserId(userDTO.getId());
 			List<DoctorDegreeDTO> doctorDegreeDTOs = doctorDegreeDAO.listDegreeByDoctorId(doctorUserDTO.getId());
 			List<DoctorSpecializationDTO> doctorSpecializationDTOs = doctorSpecializationDAO.listSpecializationByDoctorId(doctorUserDTO.getId());
@@ -276,9 +288,11 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 			details.getDegrees().addAll(toDoctorDegree(doctorDegreeDTOs));
 			details.getSpecialization().addAll(toDoctorSpecialization(doctorSpecializationDTOs));
 			details.getMciReg().addAll(toDoctorMci(doctorMciDTOs));
+			response.setDoctorUserDetails(details);
 		} else {
 			throw new HandledException("NOT_A_DOCTOR_USER", "Not a doctor user");
 		}
+		
 		return ServiceUtils.setResponse(response, true, "Get User Details");
 	}
 

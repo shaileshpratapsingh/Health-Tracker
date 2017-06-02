@@ -2,7 +2,6 @@ package com.psquickit.dto;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,11 +20,11 @@ public class DoctorSpecializationDTO implements Serializable {
 	@Column(name = "ID", unique = true, nullable = false)
 	private Long id;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "DoctorUserId")
 	private DoctorUserDTO doctorUser;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "SpecializationMasterId")
 	private SpecializationMasterDTO specializationMaster;
 

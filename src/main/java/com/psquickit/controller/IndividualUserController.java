@@ -43,7 +43,7 @@ public class IndividualUserController {
 	public @ResponseBody IndividualUserUpdateResponse updateUser(
 			@RequestHeader(value="authToken", required=true) String authToken,
 			@RequestPart(value="profilePic", required=false) MultipartFile profilePic,
-			@RequestPart(value = "userRegistration", required=true) IndividualUserUpdateRequest request) {
+			@RequestPart(value = "userUpdate", required=true) IndividualUserUpdateRequest request) {
 		IndividualUserUpdateResponse response = new IndividualUserUpdateResponse();
 		try {
 			response = manager.updateUser(authToken, request, profilePic);

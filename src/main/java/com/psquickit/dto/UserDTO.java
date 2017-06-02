@@ -1,6 +1,5 @@
 package com.psquickit.dto;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -49,7 +48,7 @@ public class UserDTO {
 	@Column(name = "AlternateAddress", length = 500)
 	private String alternateAddress;
 
-	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToOne
 	@JoinColumn(name = "ProfileImageFileStoreId")
 	private FileStoreDTO profileImageFileStoreId;
 
