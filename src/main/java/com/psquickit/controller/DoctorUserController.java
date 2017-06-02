@@ -2,6 +2,7 @@ package com.psquickit.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.psquickit.manager.DoctorUserManager;
+import com.psquickit.pojo.DoctorUserDetailResponse;
 import com.psquickit.pojo.DoctorUserRegisterRequest;
 import com.psquickit.pojo.DoctorUserRegisterResponse;
 import com.psquickit.pojo.DoctorUserUpdateRequest;
@@ -24,7 +26,7 @@ import com.psquickit.util.ServiceUtils;
 public class DoctorUserController {
 
 	@Autowired
-	DoctorUserManager doctorUserManger;
+	DoctorUserManager manager;
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST, headers = "content-type=multipart/form-data")
 	public @ResponseBody DoctorUserRegisterResponse registerUser(
@@ -32,7 +34,7 @@ public class DoctorUserController {
 			@RequestPart(value = "doctorRegistration", required=true) DoctorUserRegisterRequest request) {
 		DoctorUserRegisterResponse response = new DoctorUserRegisterResponse();
 		try {
-			response = doctorUserManger.registerUser(request, profilePic);
+			response = manager.registerUser(request, profilePic);
 		} catch (Exception e) {
 			return ServiceUtils.setResponse(response, false, "Doctor User Registration", e);
 		}
@@ -40,11 +42,13 @@ public class DoctorUserController {
 	}
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST, headers = "content-type=multipart/form-data")
-	public @ResponseBody DoctorUserUpdateResponse updateUser(@RequestBody DoctorUserUpdateRequest request,
+	public @ResponseBody DoctorUserUpdateResponse updateUser(
+			@RequestHeader(value="authToken", required=true) String authToken,
+			@RequestBody DoctorUserUpdateRequest request,
 			@RequestPart("profilePic") MultipartFile profilePic) {
 		DoctorUserUpdateResponse response = new DoctorUserUpdateResponse();
 		try {
-			response = doctorUserManger.updateUser(request, profilePic);
+			response = manager.updateUser(authToken, request, profilePic);
 		} catch (Exception e) {
 			return ServiceUtils.setResponse(response, false, "Doctor User Registration", e);
 		}
@@ -55,7 +59,7 @@ public class DoctorUserController {
 	public @ResponseBody ListAllDegreeResponse listAllDegrees() {
 		ListAllDegreeResponse response = new ListAllDegreeResponse();
 		try {
-			response = doctorUserManger.listAllDegree();
+			response = manager.listAllDegree();
 		} catch (Exception e) {
 			return ServiceUtils.setResponse(response, false, "List All Degree", e);
 		}
@@ -66,7 +70,7 @@ public class DoctorUserController {
 	public @ResponseBody ListAllMciResponse listAllMci() {
 		ListAllMciResponse response = new ListAllMciResponse();
 		try {
-			response = doctorUserManger.listAllMci();
+			response = manager.listAllMci();
 		} catch (Exception e) {
 			return ServiceUtils.setResponse(response, false, "List All MCI", e);
 		}
@@ -77,9 +81,21 @@ public class DoctorUserController {
 	public @ResponseBody ListAllSpecializationResponse listAllSpecialization() {
 		ListAllSpecializationResponse response = new ListAllSpecializationResponse();
 		try {
-			response = doctorUserManger.listAllSpecialization();
+			response = manager.listAllSpecialization();
 		} catch (Exception e) {
 			return ServiceUtils.setResponse(response, false, "List All MCI", e);
+		}
+		return response;
+	}
+	
+	@RequestMapping(value = "/get/details", method = RequestMethod.GET)
+	public @ResponseBody DoctorUserDetailResponse getDoctorUserDetail(
+			@RequestHeader(value="authToken", required=true) String authToken) {
+		DoctorUserDetailResponse response = new DoctorUserDetailResponse();
+		try {
+			response = manager.getDoctorUserDetail(authToken);
+		} catch (Exception e) {
+			return ServiceUtils.setResponse(response, false, "Get doctor user details", e);
 		}
 		return response;
 	}

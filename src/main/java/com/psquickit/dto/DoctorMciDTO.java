@@ -27,7 +27,7 @@ public class DoctorMciDTO {
 	private MciMasterDTO mciMasterId;
 
 	@Column(name = "RegistrationNumber")
-	private Long registrationNumber;
+	private String registrationNumber;
 
 	public Long getId() {
 		return id;
@@ -45,11 +45,11 @@ public class DoctorMciDTO {
 		this.mciMasterId = mciMasterId;
 	}
 
-	public Long getRegistrationNumber() {
+	public String getRegistrationNumber() {
 		return registrationNumber;
 	}
 
-	public void setRegistrationNumber(Long registrationNumber) {
+	public void setRegistrationNumber(String registrationNumber) {
 		this.registrationNumber = registrationNumber;
 	}
 

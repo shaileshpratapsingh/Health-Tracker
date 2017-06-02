@@ -16,7 +16,7 @@ public interface IndividualUserManager {
 	IndividualUserRegisterResponse registerUser(IndividualUserRegisterRequest request, 
 			MultipartFile profilePic) throws Exception;
 
-	IndividualUserUpdateResponse updateUser(IndividualUserUpdateRequest request,
+	IndividualUserUpdateResponse updateUser(String authToken, IndividualUserUpdateRequest request,
 			MultipartFile profilePic) throws Exception;
 
 	UserDetailResponse getUserDetail(String authToken) throws Exception;

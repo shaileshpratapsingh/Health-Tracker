@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.collect.Lists;
 import com.psquickit.common.HandledException;
+import com.psquickit.common.UserType;
 import com.psquickit.dao.DegreeMasterDAO;
 import com.psquickit.dao.DoctorDegreeDAO;
 import com.psquickit.dao.DoctorMciDAO;
@@ -26,12 +27,14 @@ import com.psquickit.dto.FileStoreDTO;
 import com.psquickit.dto.MciMasterDTO;
 import com.psquickit.dto.SpecializationMasterDTO;
 import com.psquickit.dto.UserDTO;
+import com.psquickit.manager.AuthenticationManager;
 import com.psquickit.manager.DoctorUserManager;
 import com.psquickit.manager.FileStoreManager;
 import com.psquickit.pojo.Degree;
 import com.psquickit.pojo.DoctorDegree;
 import com.psquickit.pojo.DoctorMci;
 import com.psquickit.pojo.DoctorSpecialization;
+import com.psquickit.pojo.DoctorUserDetailResponse;
 import com.psquickit.pojo.DoctorUserDetails;
 import com.psquickit.pojo.DoctorUserRegisterRequest;
 import com.psquickit.pojo.DoctorUserRegisterResponse;
@@ -75,6 +78,9 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 	
 	@Autowired
 	FileStoreManager fileStoreManager;
+	
+	@Autowired
+	AuthenticationManager authManager;
 
 	@Override
 	public DoctorUserRegisterResponse registerUser(DoctorUserRegisterRequest request, MultipartFile profilePic)
@@ -126,7 +132,7 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 			DoctorMciDTO doctorMciDTO = new DoctorMciDTO();
 			doctorMciDTO.setDoctorUserDTO(doctorUserDTO);
 			doctorMciDTO.setMciMasterId(mciMasterDAO.findOne(Long.parseLong(mci.getId())));
-			doctorMciDTO.setRegistrationNumber(Long.parseLong(mci.getRegistrationNumber()));
+			doctorMciDTO.setRegistrationNumber(mci.getRegistrationNumber());
 			listDoctorMciDTO.add(doctorMciDTO);
 		}
 		doctorMciDAO.save(listDoctorMciDTO);
@@ -184,12 +190,16 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 	}
 
 	@Override
-	public DoctorUserUpdateResponse updateUser(DoctorUserUpdateRequest request, MultipartFile profilePic)
+	public DoctorUserUpdateResponse updateUser(String authToken, DoctorUserUpdateRequest request, MultipartFile profilePic)
 			throws Exception {
+		long userId = authManager.getUserId(authToken);
 		
-		DoctorUserDTO doctorUserDTO = doctorUserDAO.getDoctorUserDetail(request.getUid());
+		DoctorUserDTO doctorUserDTO = doctorUserDAO.getDoctorUserByUserId(userId);
 		if (doctorUserDTO == null) {
 			throw new HandledException("USER_DOES_NOT_EXIST", "User does not exist");
+		}
+		if (!request.getUid().equalsIgnoreCase(doctorUserDTO.getUserDTO().getUid())) {
+			throw new HandledException("CANNOT_UPDATE_UID", "Aadhaar number cannot be updated");
 		}
 		
 		FileStoreDTO profilePicFileStoreDTO = doctorUserDTO.getUserDTO().getProfileImageFileStoreId();
@@ -244,5 +254,66 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 		doctorUserDTO.setInPersonConsultant(request.getInPersonConsultant());
 		doctorUserDTO.seteConsultant(request.getEConsultant());
 		return doctorUserDTO;
+	}
+	
+	@Override
+	public DoctorUserDetailResponse getDoctorUserDetail(String authToken) throws Exception {
+		DoctorUserDetailResponse response = new DoctorUserDetailResponse();
+		long userId = authManager.getUserId(authToken);
+		UserDTO userDTO = userDAO.findOne(userId);
+		if (UserType.valueOf(userDTO.getUserType()) == UserType.DOCTOR_USER) {
+			DoctorUserDTO doctorUserDTO = doctorUserDAO.getDoctorUserByUserId(userDTO.getId());
+			List<DoctorDegreeDTO> doctorDegreeDTOs = doctorDegreeDAO.listDegreeByDoctorId(doctorUserDTO.getId());
+			List<DoctorSpecializationDTO> doctorSpecializationDTOs = doctorSpecializationDAO.listSpecializationByDoctorId(doctorUserDTO.getId());
+			List<DoctorMciDTO> doctorMciDTOs = doctorMciDAO.listMciByDoctorId(doctorUserDTO.getId());
+			DoctorUserDetails details = new DoctorUserDetails();
+			details = UserCommonManagerImpl.toBasicUserDetails(details, doctorUserDTO.getUserDTO());
+			details.setClinicAddress(doctorUserDTO.getClinicAddress());
+			details.setPracticeArea(doctorUserDTO.getPracticeArea());
+			details.setInPersonConsultant(doctorUserDTO.getInPersonConsultant());
+			details.setEConsultant(doctorUserDTO.geteConsultant());
+			details.setClinicContactNo(doctorUserDTO.getClinicContactNumber());
+			details.getDegrees().addAll(toDoctorDegree(doctorDegreeDTOs));
+			details.getSpecialization().addAll(toDoctorSpecialization(doctorSpecializationDTOs));
+			details.getMciReg().addAll(toDoctorMci(doctorMciDTOs));
+		} else {
+			throw new HandledException("NOT_A_DOCTOR_USER", "Not a doctor user");
+		}
+		return ServiceUtils.setResponse(response, true, "Get User Details");
+	}
+
+	private List<DoctorMci> toDoctorMci(List<DoctorMciDTO> doctorMciDTOs) {
+		List<DoctorMci> list = Lists.newArrayList();
+		for (DoctorMciDTO dto: doctorMciDTOs) {
+			DoctorMci mci = new DoctorMci();
+			mci.setId(Long.toString(dto.getId()));
+			mci.setRegistrationNumber(dto.getRegistrationNumber());
+			mci.setTitle(dto.getMciMasterId().getMciName());
+			list.add(mci);
+		}
+		return list;
+	}
+
+	private List<DoctorSpecialization> toDoctorSpecialization(
+			List<DoctorSpecializationDTO> doctorSpecializationDTOs) {
+		List<DoctorSpecialization> list = Lists.newArrayList();
+		for (DoctorSpecializationDTO dto: doctorSpecializationDTOs) {
+			DoctorSpecialization s = new DoctorSpecialization();
+			s.setId(Long.toString(dto.getId()));
+			s.setTitle(dto.getSpecializationMaster().getSpecializationName());
+			list.add(s);
+		}
+		return list;
+	}
+
+	private List<DoctorDegree> toDoctorDegree(List<DoctorDegreeDTO> doctorDegreeDTOs) {
+		List<DoctorDegree> list = Lists.newArrayList();
+		for (DoctorDegreeDTO dto: doctorDegreeDTOs) {
+			DoctorDegree s = new DoctorDegree();
+			s.setId(Long.toString(dto.getId()));
+			s.setTitle(dto.getDegreeMasterDTO().getDegreeName());
+			list.add(s);
+		}
+		return list;
 	}
 }

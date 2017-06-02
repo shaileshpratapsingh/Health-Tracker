@@ -24,8 +24,7 @@ public class UserCommonManagerImpl {
 		return userDTO;
 	}
 
-	public static BasicUserDetails toBasicUserDetails(UserDTO userDTO) {
-		BasicUserDetails details = new BasicUserDetails();
+	public static <T extends BasicUserDetails> T toBasicUserDetails(T details, UserDTO userDTO) {
 		details.setUid(userDTO.getUid());
 		details.setFirstName(userDTO.getFirstName());
 		details.setLastName(userDTO.getLastName());

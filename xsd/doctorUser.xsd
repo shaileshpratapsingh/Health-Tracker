@@ -161,7 +161,7 @@
 		</xs:complexType>
 	</xs:element>
 	
-	<xs:element name="doctorDetailResponse">
+	<xs:element name="doctorUserDetailResponse">
 		<xs:complexType>
 			<xs:complexContent>
 				<xs:extension base="ns1:genericServiceResponse">

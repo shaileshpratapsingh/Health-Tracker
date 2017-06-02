@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.google.common.io.ByteSource;
 import com.psquickit.common.HandledException;
 import com.psquickit.dao.UserDAO;
 import com.psquickit.dto.FileStoreDTO;
@@ -17,6 +16,7 @@ import com.psquickit.dto.UserDTO;
 import com.psquickit.manager.AuthenticationManager;
 import com.psquickit.manager.FileStoreManager;
 import com.psquickit.manager.IndividualUserManager;
+import com.psquickit.pojo.BasicUserDetails;
 import com.psquickit.pojo.IndividualUserRegisterRequest;
 import com.psquickit.pojo.IndividualUserRegisterResponse;
 import com.psquickit.pojo.IndividualUserUpdateRequest;
@@ -37,7 +37,7 @@ public class IndividualUserManagerImpl implements IndividualUserManager {
 	FileStoreManager fileStoreManager;
 	
 	@Autowired
-	public AuthenticationManager authManager;
+	AuthenticationManager authManager;
 	
 	@Override
 	public IndividualUserRegisterResponse registerUser(IndividualUserRegisterRequest request,
@@ -62,11 +62,17 @@ public class IndividualUserManagerImpl implements IndividualUserManager {
 	}
 
 	@Override
-	public IndividualUserUpdateResponse updateUser(IndividualUserUpdateRequest request,
+	public IndividualUserUpdateResponse updateUser(String authToken, IndividualUserUpdateRequest request,
 			MultipartFile profilePic) throws Exception {
-		UserDTO userDTO = userDAO.checkUIDExist(request.getUid());
+		
+		long userId = authManager.getUserId(authToken);
+		
+		UserDTO userDTO = userDAO.findOne(userId);
 		if (userDTO == null) {
 			throw new HandledException("USER_DOES_NOT_EXIST", "User does not exist.");
+		}
+		if (!request.getUid().equalsIgnoreCase(userDTO.getUid())) {
+			throw new HandledException("CANNOT_UPDATE_UID", "Aadhaar number cannot be updated");
 		}
 		IndividualUserUpdateResponse response = new IndividualUserUpdateResponse();
 		
@@ -90,7 +96,7 @@ public class IndividualUserManagerImpl implements IndividualUserManager {
 		UserDetailResponse response = new UserDetailResponse();
 		long userId = authManager.getUserId(authToken);
 		UserDTO dto = userDAO.findOne(userId);
-		response.setUserDetails(UserCommonManagerImpl.toBasicUserDetails(dto));
+		response.setUserDetails(UserCommonManagerImpl.toBasicUserDetails(new BasicUserDetails(), dto));
 		return ServiceUtils.setResponse(response, true, "Get User Details");
 	}
 	

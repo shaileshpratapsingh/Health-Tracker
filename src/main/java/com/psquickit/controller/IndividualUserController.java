@@ -41,11 +41,12 @@ public class IndividualUserController {
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST, headers = "content-type=multipart/form-data")
 	public @ResponseBody IndividualUserUpdateResponse updateUser(
+			@RequestHeader(value="authToken", required=true) String authToken,
 			@RequestPart(value="profilePic", required=false) MultipartFile profilePic,
 			@RequestPart(value = "userRegistration", required=true) IndividualUserUpdateRequest request) {
 		IndividualUserUpdateResponse response = new IndividualUserUpdateResponse();
 		try {
-			response = manager.updateUser(request, profilePic);
+			response = manager.updateUser(authToken, request, profilePic);
 		} catch (Exception e) {
 			return ServiceUtils.setResponse(response, false, "User Registration", e);
 		}
