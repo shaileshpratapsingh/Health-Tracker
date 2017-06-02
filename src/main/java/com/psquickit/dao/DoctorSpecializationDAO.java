@@ -13,6 +13,6 @@ import com.psquickit.dto.DoctorSpecializationDTO;
 public interface DoctorSpecializationDAO extends JpaRepository<DoctorSpecializationDTO, Long> {
 
 	@Query("Select d from DoctorSpecializationDTO d where d.doctorUser.id = :id")
-	public List<DoctorSpecializationDTO> getDoctorSpecializations(@Param("id") Long uid);
+	public List<DoctorSpecializationDTO> listSpecializationByDoctorId(@Param("id") Long id);
 
 }

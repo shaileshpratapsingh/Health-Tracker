@@ -13,5 +13,5 @@ import com.psquickit.dto.DoctorMciDTO;
 public interface DoctorMciDAO extends JpaRepository<DoctorMciDTO, Long> {
 
 	@Query("Select d from DoctorMciDTO d where d.doctorUserDTO.id = :id")
-	public List<DoctorMciDTO> getDoctorMCIs(@Param("id") Long uid);
+	public List<DoctorMciDTO> listMciByDoctorId(@Param("id") Long id);
 }

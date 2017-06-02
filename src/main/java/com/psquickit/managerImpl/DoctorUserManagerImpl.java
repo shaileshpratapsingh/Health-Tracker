@@ -29,6 +29,9 @@ import com.psquickit.dto.UserDTO;
 import com.psquickit.manager.DoctorUserManager;
 import com.psquickit.manager.FileStoreManager;
 import com.psquickit.pojo.Degree;
+import com.psquickit.pojo.DoctorDegree;
+import com.psquickit.pojo.DoctorMci;
+import com.psquickit.pojo.DoctorSpecialization;
 import com.psquickit.pojo.DoctorUserDetails;
 import com.psquickit.pojo.DoctorUserRegisterRequest;
 import com.psquickit.pojo.DoctorUserRegisterResponse;
@@ -95,9 +98,9 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 		return ServiceUtils.setResponse(new DoctorUserRegisterResponse(), true, "Register Doctor User");
 	}
 
-	private void saveDoctorSpecializations(List<Specialization> listSpecialization, DoctorUserDTO doctorUserDTO) {
+	private void saveDoctorSpecializations(List<DoctorSpecialization> listSpecialization, DoctorUserDTO doctorUserDTO) {
 		List<DoctorSpecializationDTO> listDoctorSpecializationDTO = Lists.newArrayList();
-		for (Specialization speciliazation : listSpecialization) {
+		for (DoctorSpecialization speciliazation : listSpecialization) {
 			DoctorSpecializationDTO doctorSpecializationDTO = new DoctorSpecializationDTO();
 			doctorSpecializationDTO.setDoctorUser(doctorUserDTO);
 			doctorSpecializationDTO.setSpecializationMaster(specializationMasterDAO.findOne(Long.parseLong(speciliazation.getId())));
@@ -106,9 +109,9 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 		doctorSpecializationDAO.save(listDoctorSpecializationDTO);
 	}
 
-	private void saveDoctorDegrees(List<Degree> listDegree, DoctorUserDTO doctorUserDTO) {
+	private void saveDoctorDegrees(List<DoctorDegree> listDegree, DoctorUserDTO doctorUserDTO) {
 		List<DoctorDegreeDTO> listDoctorDegreeDTO = Lists.newArrayList();
-		for (Degree degree : listDegree) {
+		for (DoctorDegree degree : listDegree) {
 			DoctorDegreeDTO doctorDegreeDTO = new DoctorDegreeDTO();
 			doctorDegreeDTO.setDoctorUserDTO(doctorUserDTO);
 			doctorDegreeDTO.setDegreeMasterDTO(degreeMasterDAO.findOne(Long.parseLong(degree.getId())));
@@ -117,14 +120,13 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 		doctorDegreeDAO.save(listDoctorDegreeDTO);
 	}
 
-	private void saveDoctorMcis(List<Mci> listMCI, DoctorUserDTO doctorUserDTO) {
+	private void saveDoctorMcis(List<DoctorMci> listMCI, DoctorUserDTO doctorUserDTO) {
 		List<DoctorMciDTO> listDoctorMciDTO = Lists.newArrayList();
-		for (Mci mci : listMCI) {
+		for (DoctorMci mci : listMCI) {
 			DoctorMciDTO doctorMciDTO = new DoctorMciDTO();
 			doctorMciDTO.setDoctorUserDTO(doctorUserDTO);
 			doctorMciDTO.setMciMasterId(mciMasterDAO.findOne(Long.parseLong(mci.getId())));
-			//TODO: This needs to be corrected
-			//doctorMciDTO.setRegistrationNumber(Long.parseLong(mci.getRegistrationNumber()));
+			doctorMciDTO.setRegistrationNumber(Long.parseLong(mci.getRegistrationNumber()));
 			listDoctorMciDTO.add(doctorMciDTO);
 		}
 		doctorMciDAO.save(listDoctorMciDTO);
@@ -212,18 +214,24 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 		return ServiceUtils.setResponse(response, true, "Update doctor user details");
 	}
 
-	private void updateDoctorMci(List<Mci> mciReg, DoctorUserDTO doctorUserDTO) {
-		// TODO Auto-generated method stub
+	private void updateDoctorMci(List<DoctorMci> mciList, DoctorUserDTO doctorUserDTO) {
+		List<DoctorMciDTO> doctorMciDTOs = doctorMciDAO.listMciByDoctorId(doctorUserDTO.getId());
+		doctorMciDAO.delete(doctorMciDTOs);
+		saveDoctorMcis(mciList, doctorUserDTO);
 		
 	}
 
-	private void updateDoctorSpecialization(List<Specialization> specialization, DoctorUserDTO doctorUserDTO) {
-		// TODO Auto-generated method stub
+	private void updateDoctorSpecialization(List<DoctorSpecialization> specializationList, DoctorUserDTO doctorUserDTO) {
+		List<DoctorSpecializationDTO> doctorSpecializationDTOs = doctorSpecializationDAO.listSpecializationByDoctorId(doctorUserDTO.getId());
+		doctorSpecializationDAO.delete(doctorSpecializationDTOs);
+		saveDoctorSpecializations(specializationList, doctorUserDTO);
 		
 	}
 
-	private void updateDoctorDegrees(List<Degree> degrees, DoctorUserDTO doctorUserDTO) {
-		
+	private void updateDoctorDegrees(List<DoctorDegree> degreesList, DoctorUserDTO doctorUserDTO) {
+		List<DoctorDegreeDTO> doctorDegreeDTOs = doctorDegreeDAO.listDegreeByDoctorId(doctorUserDTO.getId());
+		doctorDegreeDAO.delete(doctorDegreeDTOs);
+		saveDoctorDegrees(degreesList, doctorUserDTO);
 		
 	}
 
