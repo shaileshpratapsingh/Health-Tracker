@@ -7,4 +7,6 @@ public interface AuthenticationManager {
 	public void removeauthToken(String authToken);
 	
 	public long getUserId(String authToken) throws Exception;
+	
+	public void validateSecretToken(String secretToken) throws Exception;
 }

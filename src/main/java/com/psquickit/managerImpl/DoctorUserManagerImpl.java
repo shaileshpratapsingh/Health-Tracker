@@ -1,5 +1,7 @@
 package com.psquickit.managerImpl;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.psquickit.common.HandledException;
 import com.psquickit.common.UserType;
@@ -32,21 +35,21 @@ import com.psquickit.dto.UserDTO;
 import com.psquickit.manager.AuthenticationManager;
 import com.psquickit.manager.DoctorUserManager;
 import com.psquickit.manager.FileStoreManager;
-import com.psquickit.pojo.Degree;
-import com.psquickit.pojo.DoctorDegree;
-import com.psquickit.pojo.DoctorMci;
-import com.psquickit.pojo.DoctorSpecialization;
-import com.psquickit.pojo.DoctorUserDetailResponse;
-import com.psquickit.pojo.DoctorUserDetails;
-import com.psquickit.pojo.DoctorUserRegisterRequest;
-import com.psquickit.pojo.DoctorUserRegisterResponse;
-import com.psquickit.pojo.DoctorUserUpdateRequest;
-import com.psquickit.pojo.DoctorUserUpdateResponse;
-import com.psquickit.pojo.ListAllDegreeResponse;
-import com.psquickit.pojo.ListAllMciResponse;
-import com.psquickit.pojo.ListAllSpecializationResponse;
-import com.psquickit.pojo.Mci;
-import com.psquickit.pojo.Specialization;
+import com.psquickit.pojo.user.Degree;
+import com.psquickit.pojo.user.DoctorDegree;
+import com.psquickit.pojo.user.DoctorMci;
+import com.psquickit.pojo.user.DoctorSpecialization;
+import com.psquickit.pojo.user.DoctorUserDetailResponse;
+import com.psquickit.pojo.user.DoctorUserDetails;
+import com.psquickit.pojo.user.DoctorUserRegisterRequest;
+import com.psquickit.pojo.user.DoctorUserRegisterResponse;
+import com.psquickit.pojo.user.DoctorUserUpdateRequest;
+import com.psquickit.pojo.user.DoctorUserUpdateResponse;
+import com.psquickit.pojo.user.ListAllDegreeResponse;
+import com.psquickit.pojo.user.ListAllMciResponse;
+import com.psquickit.pojo.user.ListAllSpecializationResponse;
+import com.psquickit.pojo.user.Mci;
+import com.psquickit.pojo.user.Specialization;
 import com.psquickit.util.ServiceUtils;
 
 @Service
@@ -86,18 +89,29 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 
 	@Override
 	@Transactional(rollbackOn=Exception.class)
-	public DoctorUserRegisterResponse registerUser(DoctorUserRegisterRequest request, MultipartFile profilePic)
+	public DoctorUserRegisterResponse registerDoctor(String secretToken, DoctorUserRegisterRequest request, MultipartFile profilePic)
 			throws Exception {
-		UserDTO userDTO = userDAO.checkUIDExist(request.getUid());
-		if (userDTO != null) {
-			throw new HandledException("DUPLICATE_USER_REGISTRATION", "Duplicate User Registration");
-		}
+		registerDoctorValidation(secretToken, request);
 		
 		FileStoreDTO profilePicFileStoreDTO = null;
 		if (profilePic != null) {
 			profilePicFileStoreDTO = fileStoreManager.uploadFile(profilePic.getInputStream(), profilePic.getContentType(), profilePic.getOriginalFilename());
 		}
 		
+		return registerDoctor(secretToken, request, profilePicFileStoreDTO);
+	}
+
+	private void registerDoctorValidation(String secretToken, DoctorUserRegisterRequest request) throws Exception {
+		authManager.validateSecretToken(secretToken);
+		UserDTO userDTO = userDAO.checkUIDExist(request.getUid());
+		if (userDTO != null) {
+			throw new HandledException("DUPLICATE_USER_REGISTRATION", "Duplicate User Registration");
+		}
+	}
+
+	private DoctorUserRegisterResponse registerDoctor(String secretToken, DoctorUserRegisterRequest request,
+			FileStoreDTO profilePicFileStoreDTO) {
+		UserDTO userDTO;
 		userDTO = UserCommonManagerImpl.createUserDTO(request, profilePicFileStoreDTO);
 		userDTO = userDAO.save(userDTO);
 		
@@ -108,8 +122,20 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 		saveDoctorSpecializations(request.getSpecialization(), doctorUserDTO);
 		
 		DoctorUserRegisterResponse response = new DoctorUserRegisterResponse();
-		response.setId(Long.toString(doctorUserDTO.getId()));
 		return ServiceUtils.setResponse(response, true, "Register Doctor User");
+	}
+	
+	@Override
+	@Transactional(rollbackOn=Exception.class)
+	public DoctorUserRegisterResponse registerDoctor(String secretToken, DoctorUserRegisterRequest request) throws Exception {
+		registerDoctorValidation(secretToken, request);
+		
+		FileStoreDTO profilePicFileStoreDTO = null;
+		if (request.getProfileImg() != null) {
+			InputStream is = new ByteArrayInputStream(request.getProfileImg().getBytes());
+			profilePicFileStoreDTO = fileStoreManager.uploadFile(is, "application/image", request.getUid());
+		}
+		return registerDoctor(secretToken, request, profilePicFileStoreDTO);
 	}
 
 	private void saveDoctorSpecializations(List<DoctorSpecialization> listSpecialization, DoctorUserDTO doctorUserDTO) {
@@ -153,7 +179,8 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 
 	@Override
 	@Transactional
-	public ListAllDegreeResponse listAllDegree() throws Exception {
+	public ListAllDegreeResponse listAllDegree(String secretToken) throws Exception {
+		authManager.validateSecretToken(secretToken);
 		ListAllDegreeResponse response = new ListAllDegreeResponse();
 		List<DegreeMasterDTO> degreeMasterDTO = degreeMasterDAO.findAll();
 		List<Degree> list = Lists.newArrayList();
@@ -169,7 +196,8 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 
 	@Override
 	@Transactional
-	public ListAllMciResponse listAllMci() throws Exception {
+	public ListAllMciResponse listAllMci(String secretToken) throws Exception {
+		authManager.validateSecretToken(secretToken);
 		ListAllMciResponse response = new ListAllMciResponse();
 		List<MciMasterDTO> listMciMasterDTO = mciMasterDAO.findAll();
 		List<Mci> listMci = Lists.newArrayList();
@@ -185,7 +213,8 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 
 	@Override
 	@Transactional
-	public ListAllSpecializationResponse listAllSpecialization() throws Exception {
+	public ListAllSpecializationResponse listAllSpecialization(String secretToken) throws Exception {
+		authManager.validateSecretToken(secretToken);
 		ListAllSpecializationResponse response = new ListAllSpecializationResponse();
 		List<SpecializationMasterDTO> listSplMasterDTO = specializationMasterDAO.findAll();
 		List<Specialization> listSpecialization = Lists.newArrayList();
@@ -201,8 +230,24 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 
 	@Override
 	@Transactional(rollbackOn=Exception.class)
-	public DoctorUserUpdateResponse updateUser(String authToken, DoctorUserUpdateRequest request, MultipartFile profilePic)
+	public DoctorUserUpdateResponse updateDoctor(String authToken, DoctorUserUpdateRequest request, MultipartFile profilePic)
 			throws Exception {
+		DoctorUserDTO doctorUserDTO = updateUserValidation(authToken, request);
+		
+		FileStoreDTO profilePicFileStoreDTO = doctorUserDTO.getUserDTO().getProfileImageFileStoreId();
+		if (profilePic != null) {
+			if (profilePicFileStoreDTO != null) {
+				fileStoreManager.updateFile(profilePicFileStoreDTO, profilePic.getInputStream(), profilePic.getContentType(), profilePic.getOriginalFilename());
+			} else {
+				profilePicFileStoreDTO = fileStoreManager.uploadFile(profilePic.getInputStream(), profilePic.getContentType(), profilePic.getOriginalFilename());
+			}
+		}
+		
+		return updateDoctor(request, doctorUserDTO, profilePicFileStoreDTO);
+	}
+
+	private DoctorUserDTO updateUserValidation(String authToken, DoctorUserUpdateRequest request)
+			throws Exception, HandledException {
 		long userId = authManager.getUserId(authToken);
 		
 		DoctorUserDTO doctorUserDTO = doctorUserDAO.getDoctorUserByUserId(userId);
@@ -212,16 +257,11 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 		if (!request.getUid().equalsIgnoreCase(doctorUserDTO.getUserDTO().getUid())) {
 			throw new HandledException("CANNOT_UPDATE_UID", "Aadhaar number cannot be updated");
 		}
-		
-		FileStoreDTO profilePicFileStoreDTO = doctorUserDTO.getUserDTO().getProfileImageFileStoreId();
-		if (profilePic != null) {
-			if (profilePicFileStoreDTO == null) {
-				fileStoreManager.updateFile(profilePicFileStoreDTO, profilePic.getInputStream(), profilePic.getContentType(), profilePic.getOriginalFilename());
-			} else {
-				profilePicFileStoreDTO = fileStoreManager.uploadFile(profilePic.getInputStream(), profilePic.getContentType(), profilePic.getOriginalFilename());
-			}
-		}
-		
+		return doctorUserDTO;
+	}
+
+	private DoctorUserUpdateResponse updateDoctor(DoctorUserUpdateRequest request, DoctorUserDTO doctorUserDTO,
+			FileStoreDTO profilePicFileStoreDTO) {
 		UserDTO userDTO = UserCommonManagerImpl.updateUserDTO(request, doctorUserDTO.getUserDTO(), profilePicFileStoreDTO);
 		doctorUserDTO = updateDoctorUserDTO(request, doctorUserDTO, userDTO);
 		doctorUserDAO.save(doctorUserDTO);
@@ -235,6 +275,24 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 		return ServiceUtils.setResponse(response, true, "Update doctor user details");
 	}
 
+	@Override
+	@Transactional(rollbackOn=Exception.class)
+	public DoctorUserUpdateResponse updateDoctor(String authToken, DoctorUserUpdateRequest request) throws Exception {
+		DoctorUserDTO doctorUserDTO = updateUserValidation(authToken, request);
+		
+		FileStoreDTO profilePicFileStoreDTO = doctorUserDTO.getUserDTO().getProfileImageFileStoreId();
+		if (request.getProfileImg() != null) {
+			InputStream is = new ByteArrayInputStream(request.getProfileImg().getBytes());
+			if (profilePicFileStoreDTO != null) {
+				fileStoreManager.updateFile(profilePicFileStoreDTO, is, "application/image", request.getUid());
+			} else {
+				profilePicFileStoreDTO = fileStoreManager.uploadFile(is, "application/image", request.getUid());
+			}
+		}
+		
+		return updateDoctor(request, doctorUserDTO, profilePicFileStoreDTO);
+	}
+	
 	private void updateDoctorMci(List<DoctorMci> mciList, DoctorUserDTO doctorUserDTO) {
 		List<DoctorMciDTO> doctorMciDTOs = doctorMciDAO.listMciByDoctorId(doctorUserDTO.getId());
 		doctorMciDAO.delete(doctorMciDTOs);
@@ -279,7 +337,11 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 			List<DoctorSpecializationDTO> doctorSpecializationDTOs = doctorSpecializationDAO.listSpecializationByDoctorId(doctorUserDTO.getId());
 			List<DoctorMciDTO> doctorMciDTOs = doctorMciDAO.listMciByDoctorId(doctorUserDTO.getId());
 			DoctorUserDetails details = new DoctorUserDetails();
-			details = UserCommonManagerImpl.toBasicUserDetails(details, doctorUserDTO.getUserDTO());
+			
+			FileStoreDTO profilePicFileStoreDTO = userDTO.getProfileImageFileStoreId();
+			String profileImage = fileStoreManager.retrieveFile(profilePicFileStoreDTO).asCharSource(Charsets.UTF_8).read();
+			
+			details = UserCommonManagerImpl.toBasicUserDetails(details, doctorUserDTO.getUserDTO(), profileImage);
 			details.setClinicAddress(doctorUserDTO.getClinicAddress());
 			details.setPracticeArea(doctorUserDTO.getPracticeArea());
 			details.setInPersonConsultant(doctorUserDTO.getInPersonConsultant());
@@ -330,4 +392,5 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 		}
 		return list;
 	}
+	
 }

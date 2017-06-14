@@ -4,16 +4,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.google.common.io.ByteSource;
-import com.psquickit.pojo.IndividualUserRegisterRequest;
-import com.psquickit.pojo.IndividualUserRegisterResponse;
-import com.psquickit.pojo.IndividualUserUpdateRequest;
-import com.psquickit.pojo.IndividualUserUpdateResponse;
-import com.psquickit.pojo.UserDetailResponse;
+import com.psquickit.pojo.user.IndividualUserRegisterRequest;
+import com.psquickit.pojo.user.IndividualUserRegisterResponse;
+import com.psquickit.pojo.user.IndividualUserUpdateRequest;
+import com.psquickit.pojo.user.IndividualUserUpdateResponse;
+import com.psquickit.pojo.user.UserDetailResponse;
 
 public interface IndividualUserManager {
 
-	IndividualUserRegisterResponse registerUser(IndividualUserRegisterRequest request, 
+	IndividualUserRegisterResponse registerUser(String secretToken, IndividualUserRegisterRequest request, 
 			MultipartFile profilePic) throws Exception;
 
 	IndividualUserUpdateResponse updateUser(String authToken, IndividualUserUpdateRequest request,
@@ -22,5 +21,9 @@ public interface IndividualUserManager {
 	UserDetailResponse getUserDetail(String authToken) throws Exception;
 
 	void getProfilePhoto(String authToken, HttpServletResponse httpResponse) throws Exception;
+
+	IndividualUserRegisterResponse registerUser(String secretToken, IndividualUserRegisterRequest request) throws Exception;
+
+	IndividualUserUpdateResponse updateUser(String authToken, IndividualUserUpdateRequest request) throws Exception;
 
 }

@@ -35,11 +35,7 @@
 	<xs:element name="doctorUserRegisterResponse">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="ns1:genericServiceResponse">
-					<xs:sequence>
-						<xs:element name="id" type="xs:string" />
-					</xs:sequence>
-				</xs:extension>
+				<xs:extension base="ns1:genericServiceResponse"/>
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>

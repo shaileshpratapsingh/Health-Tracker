@@ -33,11 +33,7 @@
 	<xs:element name="individualUserRegisterResponse">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="ns1:genericServiceResponse">
-					<xs:sequence>
-						<xs:element name="id" type="xs:string" />
-					</xs:sequence>
-				</xs:extension>
+				<xs:extension base="ns1:genericServiceResponse"/>
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
@@ -87,6 +83,34 @@
 				<xs:extension base="ns1:genericServiceResponse">
 					<xs:sequence>
 						<xs:element name="userDetails" type="tns:basicUserDetails" />
+					</xs:sequence>
+				</xs:extension>
+				
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="initiateKycRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="saCode" type="xs:string" />
+				<xs:element name="aadhaarId" type="xs:string" />
+				<xs:element name="requestId" type="xs:string" />
+				<xs:element name="purpose" type="xs:string" />
+				<xs:element name="modality" type="xs:string" />
+				<xs:element name="successUrl" type="xs:string" />
+				<xs:element name="failureUrl" type="xs:string" />
+				<xs:element name="hash" type="xs:string" />
+				<xs:element name="kycCaptureData" type="xs:string" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="getKycDetailsResponse">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="ns1:genericServiceResponse">
+					<xs:sequence>
+						<xs:element name="authToken" type="xs:string" />
 					</xs:sequence>
 				</xs:extension>
 			</xs:complexContent>

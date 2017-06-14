@@ -17,7 +17,8 @@ import com.psquickit.dao.UserDAO;
 import com.psquickit.dto.UserDTO;
 import com.psquickit.manager.AuthenticationManager;
 import com.psquickit.manager.LoginManager;
-import com.psquickit.pojo.UserLoginResponse;
+import com.psquickit.pojo.user.UserLoginRequest;
+import com.psquickit.pojo.user.UserLoginResponse;
 import com.psquickit.util.ServiceUtils;
 
 @Service
@@ -52,8 +53,8 @@ public class LoginManagerImpl implements LoginManager {
 	
 	@Override
 	@Transactional
-	public UserLoginResponse login(String uid) throws Exception {
-		UserDTO userDTO = userDAO.checkUIDExist(uid);
+	public UserLoginResponse login(String secretToken, UserLoginRequest request) throws Exception {
+		UserDTO userDTO = userDAO.checkUIDExist(request.getUid());
 		if (userDTO == null) {
 			throw new HandledException("USER_DOES_NOT_EXIST", "User does not exist");
 		}

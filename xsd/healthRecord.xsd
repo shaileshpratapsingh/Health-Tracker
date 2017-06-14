@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://api.psquickit.com/healthRecord" xmlns:tns="http://api.psquickit.com/healthRecord"
+	xmlns:ns1="http://api.psquickit.com/common">
+
+	<xs:import namespace="http://api.psquickit.com/common"
+		schemaLocation="generic-service-response.xsd" />
+
+	<xs:element name="uploadHealthRecordResponse">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="ns1:genericServiceResponse">
+					<xs:sequence>
+						<xs:element name="healthRecordId" type="xs:string" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="getHealthRecordResponse">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="ns1:genericServiceResponse">
+					<xs:sequence>
+						<xs:element name="id" type="xs:string" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="uploadBasicHealthParameterResponse">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="ns1:genericServiceResponse">
+					<xs:sequence>
+						<xs:element name="healthRecordId" type="xs:string" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="updateBasicHealthParameterResponse">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="ns1:genericServiceResponse">
+					<xs:sequence>
+						<xs:element name="healthRecordId" type="xs:string" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="uploadPrescriptionResponse">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="ns1:genericServiceResponse">
+					<xs:sequence>
+						<xs:element name="healthRecordId" type="xs:string" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="uploadDiagnosisResponse">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="ns1:genericServiceResponse">
+					<xs:sequence>
+						<xs:element name="healthRecordId" type="xs:string" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="deletePrescriptionResponse">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="ns1:genericServiceResponse">
+					<xs:sequence>
+						<xs:element name="healthRecordId" type="xs:string" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="deleteDiagnosisResponse">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="ns1:genericServiceResponse">
+					<xs:sequence>
+						<xs:element name="healthRecordId" type="xs:string" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+</xs:schema>
+	
+	

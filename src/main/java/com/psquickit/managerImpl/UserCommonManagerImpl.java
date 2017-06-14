@@ -3,8 +3,7 @@ package com.psquickit.managerImpl;
 import com.psquickit.common.UserType;
 import com.psquickit.dto.FileStoreDTO;
 import com.psquickit.dto.UserDTO;
-import com.psquickit.pojo.BasicUserDetails;
-import com.psquickit.pojo.UserLoginResponse;
+import com.psquickit.pojo.user.BasicUserDetails;
 
 public class UserCommonManagerImpl {
 
@@ -24,7 +23,7 @@ public class UserCommonManagerImpl {
 		return userDTO;
 	}
 
-	public static <T extends BasicUserDetails> T toBasicUserDetails(T details, UserDTO userDTO) {
+	public static <T extends BasicUserDetails> T toBasicUserDetails(T details, UserDTO userDTO, String profileImage) {
 		details.setUid(userDTO.getUid());
 		details.setFirstName(userDTO.getFirstName());
 		details.setLastName(userDTO.getLastName());
@@ -36,6 +35,7 @@ public class UserCommonManagerImpl {
 		details.setGender(userDTO.getGender());
 		details.setEmail(userDTO.getEmail());
 		details.setUserType(UserType.fromName(userDTO.getUserType()).getName());
+		details.setProfileImg(profileImage);
 		return details;
 	}
 
