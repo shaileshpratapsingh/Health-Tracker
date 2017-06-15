@@ -8,31 +8,27 @@ import com.psquickit.pojo.user.BasicUserDetails;
 public class UserCommonManagerImpl {
 
 	public static <T extends BasicUserDetails> UserDTO updateUserDTO(T userDetails, UserDTO userDTO, FileStoreDTO profilePicFileStoreDTO) {
-		userDTO.setUid(userDetails.getUid());
+		userDTO.setAadhaarNumber(userDetails.getUid());
 		userDTO.setFirstName(userDetails.getFirstName());
 		userDTO.setLastName(userDetails.getLastName());
 		userDTO.setContactNumber(userDetails.getContactNo());
 		userDTO.setAlternateContactNumber(userDetails.getAlternateContactNo());
 		userDTO.setAlternateAddress(userDetails.getAlternateAddress());
 		userDTO.setPermanentAddress(userDetails.getPermanentAddress());
-		userDTO.setAge(userDetails.getAge());
-		userDTO.setGender(userDetails.getGender());
 		userDTO.setEmail(userDetails.getEmail());
 		userDTO.setUserType(UserType.fromName(userDetails.getUserType()).getName());
-		userDTO.setProfileImageFileStoreId(profilePicFileStoreDTO);
+		userDTO.setProfileImageFileStore(profilePicFileStoreDTO);
 		return userDTO;
 	}
 
 	public static <T extends BasicUserDetails> T toBasicUserDetails(T details, UserDTO userDTO, String profileImage) {
-		details.setUid(userDTO.getUid());
+		details.setUid(userDTO.getAadhaarNumber());
 		details.setFirstName(userDTO.getFirstName());
 		details.setLastName(userDTO.getLastName());
 		details.setContactNo(userDTO.getContactNumber());
 		details.setAlternateContactNo(userDTO.getAlternateContactNumber());
 		details.setAlternateAddress(userDTO.getAlternateAddress());
 		details.setPermanentAddress(userDTO.getPermanentAddress());
-		details.setAge(userDTO.getAge());
-		details.setGender(userDTO.getGender());
 		details.setEmail(userDTO.getEmail());
 		details.setUserType(UserType.fromName(userDTO.getUserType()).getName());
 		details.setProfileImg(profileImage);

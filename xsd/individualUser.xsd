@@ -11,8 +11,6 @@
 			<xs:element name="uid" type="xs:string" />
 			<xs:element name="firstName" type="xs:string"/>
 			<xs:element name="lastName" type="xs:string"/>
-			<xs:element name="gender" type="xs:string"/>
-			<xs:element name="age" type="xs:string"/>
 			<xs:element name="contactNo" type="xs:string"/>
 			<xs:element name="alternateContactNo" type="xs:string"/>
 			<xs:element name="alternateAddress" type="xs:string"/>

@@ -97,7 +97,7 @@ public class IndividualUserManagerImpl implements IndividualUserManager {
 		
 		UserDTO userDTO = updateUserValidation(authToken, request);
 		
-		FileStoreDTO profilePicFileStoreDTO = userDTO.getProfileImageFileStoreId();
+		FileStoreDTO profilePicFileStoreDTO = userDTO.getProfileImageFileStore();
 		if (profilePic != null) {
 			if (profilePicFileStoreDTO != null) {
 				fileStoreManager.updateFile(profilePicFileStoreDTO, profilePic.getInputStream(), profilePic.getContentType(), profilePic.getOriginalFilename());
@@ -114,7 +114,7 @@ public class IndividualUserManagerImpl implements IndividualUserManager {
 		userDTO = UserCommonManagerImpl.updateUserDTO(request, userDTO, profilePicFileStoreDTO);
 		userDAO.save(userDTO);
 		IndividualUserUpdateResponse response = new IndividualUserUpdateResponse();
-		response.setId(userDTO.getUid());
+		response.setId(userDTO.getAadhaarNumber());
 		return ServiceUtils.setResponse(response, true, "Update User");
 	}
 
@@ -126,7 +126,7 @@ public class IndividualUserManagerImpl implements IndividualUserManager {
 		if (userDTO == null) {
 			throw new HandledException("USER_DOES_NOT_EXIST", "User does not exist.");
 		}
-		if (!request.getUid().equalsIgnoreCase(userDTO.getUid())) {
+		if (!request.getUid().equalsIgnoreCase(userDTO.getAadhaarNumber())) {
 			throw new HandledException("CANNOT_UPDATE_UID", "Aadhaar number cannot be updated");
 		}
 		return userDTO;
@@ -137,7 +137,7 @@ public class IndividualUserManagerImpl implements IndividualUserManager {
 	public IndividualUserUpdateResponse updateUser(String authToken, IndividualUserUpdateRequest request) throws Exception {
 		UserDTO userDTO = updateUserValidation(authToken, request);
 		
-		FileStoreDTO profilePicFileStoreDTO = userDTO.getProfileImageFileStoreId();
+		FileStoreDTO profilePicFileStoreDTO = userDTO.getProfileImageFileStore();
 		InputStream is = new ByteArrayInputStream(request.getProfileImg().getBytes());
 		if (profilePicFileStoreDTO != null) {
 			fileStoreManager.updateFile(profilePicFileStoreDTO, is, "application/image", request.getUid());
@@ -154,7 +154,7 @@ public class IndividualUserManagerImpl implements IndividualUserManager {
 		UserDetailResponse response = new UserDetailResponse();
 		long userId = authManager.getUserId(authToken);
 		UserDTO dto = userDAO.findOne(userId);
-		FileStoreDTO profilePicFileStoreDTO = dto.getProfileImageFileStoreId();
+		FileStoreDTO profilePicFileStoreDTO = dto.getProfileImageFileStore();
 		String profileImage = fileStoreManager.retrieveFile(profilePicFileStoreDTO).asCharSource(Charsets.UTF_8).read();
 		response.setUserDetails(UserCommonManagerImpl.toBasicUserDetails(new BasicUserDetails(), dto, profileImage));
 		return ServiceUtils.setResponse(response, true, "Get User Details");
@@ -165,9 +165,9 @@ public class IndividualUserManagerImpl implements IndividualUserManager {
 	public void getProfilePhoto(String authToken, HttpServletResponse httpResponse) throws Exception {
 		long userId = authManager.getUserId(authToken);
 		UserDTO dto = userDAO.findOne(userId);
-		FileStoreDTO profilePicFileStoreDTO = dto.getProfileImageFileStoreId();
+		FileStoreDTO profilePicFileStoreDTO = dto.getProfileImageFileStore();
 		httpResponse.setContentType(profilePicFileStoreDTO.getDocumentType());
-		httpResponse.setHeader(CommonUtils.CONTENT_DISPOSITION, CommonUtils.CONTENT_DISPOSITION_ATTACHMENT + profilePicFileStoreDTO.getName());
+		httpResponse.setHeader(CommonUtils.CONTENT_DISPOSITION, CommonUtils.CONTENT_DISPOSITION_ATTACHMENT + profilePicFileStoreDTO.getFileName());
 		try (OutputStream outputStream = httpResponse.getOutputStream()) {
 			outputStream.write(fileStoreManager.retrieveFile(profilePicFileStoreDTO).read());
 		}

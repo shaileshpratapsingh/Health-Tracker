@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.io.ByteSource;
 import com.google.common.io.Files;
-import com.psquickit.common.HandledException;
 import com.psquickit.dao.FileStoreDAO;
 import com.psquickit.dto.FileStoreDTO;
 import com.psquickit.manager.FileStoreManager;
@@ -31,7 +30,7 @@ public class FileStoreManagerImpl implements FileStoreManager {
 		FileStoreDTO dto = new FileStoreDTO();
 		dto.setDocumentType(contentType);
 		dto.setLocation(targetFileName);
-		dto.setName(fileName);
+		dto.setFileName(fileName);
 		return fileStoreDAO.save(dto);
 	}
 	
@@ -40,7 +39,7 @@ public class FileStoreManagerImpl implements FileStoreManager {
 		String targetFileName = dto.getLocation();
 		File targetFile = new File(targetFileName);
 		FileUtils.copyInputStreamToFile(is, targetFile);
-		dto.setName(fileName);
+		dto.setFileName(fileName);
 		fileStoreDAO.save(dto);
 	}
 

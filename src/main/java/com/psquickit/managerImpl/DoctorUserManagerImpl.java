@@ -153,8 +153,8 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 		List<DoctorDegreeDTO> listDoctorDegreeDTO = Lists.newArrayList();
 		for (DoctorDegree degree : listDegree) {
 			DoctorDegreeDTO doctorDegreeDTO = new DoctorDegreeDTO();
-			doctorDegreeDTO.setDoctorUserDTO(doctorUserDTO);
-			doctorDegreeDTO.setDegreeMasterDTO(degreeMasterDAO.findOne(Long.parseLong(degree.getId())));
+			doctorDegreeDTO.setDoctorUser(doctorUserDTO);
+			doctorDegreeDTO.setDegreeMaster(degreeMasterDAO.findOne(Long.parseLong(degree.getId())));
 			listDoctorDegreeDTO.add(doctorDegreeDTO);
 		}
 		doctorDegreeDAO.save(listDoctorDegreeDTO);
@@ -164,8 +164,8 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 		List<DoctorMciDTO> listDoctorMciDTO = Lists.newArrayList();
 		for (DoctorMci mci : listMCI) {
 			DoctorMciDTO doctorMciDTO = new DoctorMciDTO();
-			doctorMciDTO.setDoctorUserDTO(doctorUserDTO);
-			doctorMciDTO.setMciMasterId(mciMasterDAO.findOne(Long.parseLong(mci.getId())));
+			doctorMciDTO.setDoctorUser(doctorUserDTO);
+			doctorMciDTO.setMciMaster(mciMasterDAO.findOne(Long.parseLong(mci.getId())));
 			doctorMciDTO.setRegistrationNumber(mci.getRegistrationNumber());
 			listDoctorMciDTO.add(doctorMciDTO);
 		}
@@ -234,7 +234,7 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 			throws Exception {
 		DoctorUserDTO doctorUserDTO = updateUserValidation(authToken, request);
 		
-		FileStoreDTO profilePicFileStoreDTO = doctorUserDTO.getUserDTO().getProfileImageFileStoreId();
+		FileStoreDTO profilePicFileStoreDTO = doctorUserDTO.getUser().getProfileImageFileStore();
 		if (profilePic != null) {
 			if (profilePicFileStoreDTO != null) {
 				fileStoreManager.updateFile(profilePicFileStoreDTO, profilePic.getInputStream(), profilePic.getContentType(), profilePic.getOriginalFilename());
@@ -254,7 +254,7 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 		if (doctorUserDTO == null) {
 			throw new HandledException("USER_DOES_NOT_EXIST", "User does not exist");
 		}
-		if (!request.getUid().equalsIgnoreCase(doctorUserDTO.getUserDTO().getUid())) {
+		if (!request.getUid().equalsIgnoreCase(doctorUserDTO.getUser().getAadhaarNumber())) {
 			throw new HandledException("CANNOT_UPDATE_UID", "Aadhaar number cannot be updated");
 		}
 		return doctorUserDTO;
@@ -262,7 +262,7 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 
 	private DoctorUserUpdateResponse updateDoctor(DoctorUserUpdateRequest request, DoctorUserDTO doctorUserDTO,
 			FileStoreDTO profilePicFileStoreDTO) {
-		UserDTO userDTO = UserCommonManagerImpl.updateUserDTO(request, doctorUserDTO.getUserDTO(), profilePicFileStoreDTO);
+		UserDTO userDTO = UserCommonManagerImpl.updateUserDTO(request, doctorUserDTO.getUser(), profilePicFileStoreDTO);
 		doctorUserDTO = updateDoctorUserDTO(request, doctorUserDTO, userDTO);
 		doctorUserDAO.save(doctorUserDTO);
 		
@@ -280,7 +280,7 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 	public DoctorUserUpdateResponse updateDoctor(String authToken, DoctorUserUpdateRequest request) throws Exception {
 		DoctorUserDTO doctorUserDTO = updateUserValidation(authToken, request);
 		
-		FileStoreDTO profilePicFileStoreDTO = doctorUserDTO.getUserDTO().getProfileImageFileStoreId();
+		FileStoreDTO profilePicFileStoreDTO = doctorUserDTO.getUser().getProfileImageFileStore();
 		if (request.getProfileImg() != null) {
 			InputStream is = new ByteArrayInputStream(request.getProfileImg().getBytes());
 			if (profilePicFileStoreDTO != null) {
@@ -315,13 +315,13 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 	}
 
 	private <T extends DoctorUserDetails> DoctorUserDTO updateDoctorUserDTO(T request, DoctorUserDTO doctorUserDTO, UserDTO userDTO) {
-		doctorUserDTO.setUserDTO(userDTO);
+		doctorUserDTO.setUser(userDTO);
 		doctorUserDTO.setClinicAddress(request.getClinicAddress());
 		doctorUserDTO.setClinicContactNumber(request.getClinicContactNo());
 		doctorUserDTO.setClinicAlternateContactNumber(request.getAlternateContactNo());
 		doctorUserDTO.setPracticeArea(request.getPracticeArea());
 		doctorUserDTO.setInPersonConsultant(request.getInPersonConsultant());
-		doctorUserDTO.seteConsultant(request.getEConsultant());
+		doctorUserDTO.setEConsultant(request.getEConsultant());
 		return doctorUserDTO;
 	}
 	
@@ -338,14 +338,14 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 			List<DoctorMciDTO> doctorMciDTOs = doctorMciDAO.listMciByDoctorId(doctorUserDTO.getId());
 			DoctorUserDetails details = new DoctorUserDetails();
 			
-			FileStoreDTO profilePicFileStoreDTO = userDTO.getProfileImageFileStoreId();
+			FileStoreDTO profilePicFileStoreDTO = userDTO.getProfileImageFileStore();
 			String profileImage = fileStoreManager.retrieveFile(profilePicFileStoreDTO).asCharSource(Charsets.UTF_8).read();
 			
-			details = UserCommonManagerImpl.toBasicUserDetails(details, doctorUserDTO.getUserDTO(), profileImage);
+			details = UserCommonManagerImpl.toBasicUserDetails(details, doctorUserDTO.getUser(), profileImage);
 			details.setClinicAddress(doctorUserDTO.getClinicAddress());
 			details.setPracticeArea(doctorUserDTO.getPracticeArea());
 			details.setInPersonConsultant(doctorUserDTO.getInPersonConsultant());
-			details.setEConsultant(doctorUserDTO.geteConsultant());
+			details.setEConsultant(doctorUserDTO.getEConsultant());
 			details.setClinicContactNo(doctorUserDTO.getClinicContactNumber());
 			details.getDegrees().addAll(toDoctorDegree(doctorDegreeDTOs));
 			details.getSpecialization().addAll(toDoctorSpecialization(doctorSpecializationDTOs));
@@ -364,7 +364,7 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 			DoctorMci mci = new DoctorMci();
 			mci.setId(Long.toString(dto.getId()));
 			mci.setRegistrationNumber(dto.getRegistrationNumber());
-			mci.setTitle(dto.getMciMasterId().getMciName());
+			mci.setTitle(dto.getMciMaster().getMciName());
 			list.add(mci);
 		}
 		return list;
@@ -387,7 +387,7 @@ public class DoctorUserManagerImpl implements DoctorUserManager {
 		for (DoctorDegreeDTO dto: doctorDegreeDTOs) {
 			DoctorDegree s = new DoctorDegree();
 			s.setId(Long.toString(dto.getId()));
-			s.setTitle(dto.getDegreeMasterDTO().getDegreeName());
+			s.setTitle(dto.getDegreeMaster().getDegreeName());
 			list.add(s);
 		}
 		return list;
